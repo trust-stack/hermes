@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 
 @Injectable()
@@ -6,25 +6,31 @@ export class ResolverService {
   constructor(private readonly prisma: PrismaService) {}
 
   async resolve(identifier: string, linkType?: string) {
-    const linkset = await this.prisma.linkset.findUnique({
-      where: { identifier },
-      include: { links: true },
+    // Load external resolver configurations
+    const resolverConfigs = await this.prisma.externalResolverSet.findMany({
+      include: {
+        resolvers: true,
+      },
     });
 
-    if (!linkset) {
-      throw new NotFoundException("Identifier not found");
-    }
+    for (const config of resolverConfigs) {
+      // Test parent configuration
+      const parentPattern = new RegExp(config.pattern);
 
-    if (linkType) {
-      const link = linkset.links.find((link) => link.relationType === linkType);
-      if (link) {
-        return { redirectUrl: link.href };
-      } else {
-        throw new NotFoundException("Link type not found");
+      // Test child configurations
+      if (parentPattern.test(identifier)) {
+        for (const resolver of config.resolvers) {
+          const childPattern = new RegExp(resolver.pattern);
+          if (childPattern.test(identifier)) {
+            return {
+              redirectUrl: `${resolver.href}/${identifier}`,
+            };
+          }
+        }
       }
     }
 
-    return linkset;
+    throw Error("Not implemented!");
   }
 
   async getResolverMetadata() {

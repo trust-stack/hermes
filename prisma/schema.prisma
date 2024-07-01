@@ -20,13 +20,25 @@ model Linkset {
 }
 
 model Link {
-  id String @id @default(uuid())
-
+  id           String   @id @default(uuid())
   relationType String
   href         String
   title        String
   lang         String[]
+  linkset      Linkset  @relation(fields: [linksetId], references: [id])
+  linksetId    String
+}
 
-  linkset   Linkset @relation(fields: [linksetId], references: [id])
-  linksetId String
+model ExternalResolverSet {
+  id        String             @id @default(uuid())
+  pattern   String
+  resolvers ExternalResolver[]
+}
+
+model ExternalResolver {
+  id                    String              @id @default(uuid())
+  href                  String
+  pattern               String
+  externalResolverSet   ExternalResolverSet @relation(fields: [externalResolverSetId], references: [id])
+  externalResolverSetId String
 }
