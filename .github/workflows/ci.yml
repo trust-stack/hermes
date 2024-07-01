@@ -54,12 +54,7 @@ jobs:
     - name: Run unit tests
       run: pnpm test 
 
-    - name: Upload test results 
-      uses: dorny/test-reporter@v1.9.1
-      with:
-        name: test-results 
-        path: reports/junit/unit-results.xml
-        reporter: jest-junit
+
 
   e2e-tests: 
     runs-on: ubuntu-latest
@@ -87,12 +82,6 @@ jobs:
         DATABASE_URL: "postgresql://hermes:password@localhost:5432/hermes?schema=public"
       run: pnpm run test:e2e
 
-    - name: Upload test results 
-      uses: dorny/test-reporter@v1.9.1
-      with:
-        name: test-results 
-        path: reports/junit/e2e-results.xml
-        reporter: jest-junit
 
   publish:
     runs-on: ubuntu-latest
