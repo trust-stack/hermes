@@ -59,6 +59,7 @@ jobs:
       with:
         name: test-results 
         path: reports/junit/unit-results.xml
+        reporter: jest-junit
 
   e2e-tests: 
     runs-on: ubuntu-latest
@@ -91,6 +92,7 @@ jobs:
       with:
         name: test-results 
         path: reports/junit/e2e-results.xml
+        reporter: jest-junit
 
   publish:
     runs-on: ubuntu-latest
