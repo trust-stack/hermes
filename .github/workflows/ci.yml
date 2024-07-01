@@ -45,11 +45,20 @@ jobs:
       with:
         node-version: '20'
 
+    - name: Install pnpm
+      run: npm install -g pnpm
+
     - name: Install dependencies 
       run: pnpm install 
 
     - name: Run unit tests
       run: pnpm test 
+
+    - name: Upload test results 
+      uses: dorny/test-reporter@v1.9.1
+      with:
+        name: test-results 
+        path: reports/junit/unit-results.xml
 
   e2e-tests: 
     runs-on: ubuntu-latest
@@ -76,6 +85,12 @@ jobs:
       env:
         DATABASE_URL: "postgresql://hermes:password@localhost:5432/hermes?schema=public"
       run: pnpm run test:e2e
+
+    - name: Upload test results 
+      uses: dorny/test-reporter@v1.9.1
+      with:
+        name: test-results 
+        path: reports/junit/e2e-results.xml
 
   publish:
     runs-on: ubuntu-latest
