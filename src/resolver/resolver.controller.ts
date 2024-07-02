@@ -1,29 +1,33 @@
-import { Controller, Get, Query, Redirect } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Redirect,
+} from "@nestjs/common";
 import { ResolverService } from "./resolver.service";
 
 @Controller()
 export class ResolverController {
   constructor(private readonly resolverService: ResolverService) {}
 
-  @Get("/resolve")
+  @Get("/:identifier")
   @Redirect()
-  async resolve(
-    @Query("identifier") identifier: string,
-    @Query("linkType") linkType?: string
-  ) {
-    // try {
-    //   const result = await this.resolverService.resolve(identifier, linkType);
-    //   if (result.redirectUrl) {
-    //     return { url: result.redirectUrl, statusCode: 302 };
-    //   } else {
-    //     return result;
-    //   }
-    // } catch (error) {
-    //   if (error instanceof NotFoundException) {
-    //     return { statusCode: 404, message: error.message };
-    //   }
-    //   throw error;
-    // }
+  async resolve(@Param("identifier") identifier: string) {
+    try {
+      const result = await this.resolverService.resolve(identifier);
+
+      if (result.redirectUrl) {
+        return { url: result.redirectUrl, statusCode: 302 };
+      } else {
+        return result;
+      }
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return { statusCode: 404, message: error.message };
+      }
+      throw error;
+    }
   }
 
   @Get("/.well-known/resolver")
