@@ -109,11 +109,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set Up Environment
-        run: |
-          apt-get update
-          apt-get install -y jq
-
       - name: Publish OpenAPI Spec to Postman
         env:
           POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
