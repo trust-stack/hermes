@@ -101,3 +101,35 @@ jobs:
 
       - name: Push Docker image
         run: docker push trustprovenance/hermes:latest
+
+  publish-openapi:
+    runs-on: ubuntu-latest
+    needs: e2e-tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Publish OpenAPI Spec to Postman
+        env:
+          POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+          COLLECTION_UID: "16535309-c78bb35d-c24d-4843-953e-57516e49d0f5"
+        run: |
+          # Define variables
+          OPENAPI_SPEC_PATH="path/to/your/openapi.yaml"
+          POSTMAN_API_URL="https://api.getpostman.com/collections/$COLLECTION_UID"
+          POSTMAN_API_KEY=$POSTMAN_API_KEY
+
+          # Convert OpenAPI to Postman Collection (using openapi-to-postmanv2)
+          npx openapi-to-postmanv2 convert -s ./openapi.json -o postman_collection.json -p
+
+          # Read the generated collection
+          COLLECTION_JSON=$(cat postman_collection.json)
+
+          # Create the body for the POST request
+          POST_BODY=$(jq -n --argjson collection "$COLLECTION_JSON" '{collection: $collection}')
+
+          # Update the collection in Postman
+          curl -X PUT $POSTMAN_API_URL \
+            -H "X-Api-Key: $POSTMAN_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "$POST_BODY"
