@@ -4,4 +4,5 @@ node_modules
 dist/
 reports/
 
+postman_collection.json
 *.tgz
