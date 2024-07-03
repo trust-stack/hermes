@@ -1,11 +1,16 @@
 import { Injectable } from "@nestjs/common";
+import { groupBy, mapValues } from "lodash";
 import { PrismaService } from "../prisma/prisma.service";
+import { LinkDto, ResolvedLinkSetDto } from "./resolver.dto";
 
 @Injectable()
 export class ResolverService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async resolve(identifier: string, linkType?: string) {
+  async resolve(
+    identifier: string,
+    linkType?: string,
+  ): Promise<{ redirectUrl: string } | ResolvedLinkSetDto> {
     // Load external resolver configurations
     const resolverConfigs = await this.prisma.externalResolverSet.findMany({
       include: {
@@ -30,7 +35,37 @@ export class ResolverService {
       }
     }
 
-    throw Error("Not implemented!");
+    const linkSet = await this.prisma.linkset.findUnique({
+      where: { identifier },
+      include: {
+        links: true,
+      },
+    });
+
+    const groupedLinkType = groupBy(linkSet?.links, (l) => l.relationType);
+
+    const mappedLinks = mapValues(groupedLinkType, (links) =>
+      links.map(
+        (l) =>
+          ({
+            href: l.href,
+            title: l.title,
+            lang: l.lang,
+          }) as LinkDto,
+      ),
+    );
+
+    return {
+      linkSet: [
+        // @ts-ignore
+        // TODO: how to get class-validator to work with key-values
+        {
+          // TODO: construct anchor url
+          anchor: identifier,
+          ...mappedLinks,
+        },
+      ],
+    };
   }
 
   async getResolverMetadata() {
