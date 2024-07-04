@@ -118,4 +118,4 @@ jobs:
         run: npm i -g swaggerhub-cli
 
       - name: Publish to SwaggerHub
-        run: swaggerhub api:update trust-provenance/hermes/1.0.0 --file openapi.json --token ${{ secrets.SWAGGERHUB_API_KEY }}
+        run: swaggerhub api:update trust-provenance/hermes/1.0.0 --file openapi.json
