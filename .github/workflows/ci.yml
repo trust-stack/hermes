@@ -119,3 +119,5 @@ jobs:
 
       - name: Publish to SwaggerHub
         run: swaggerhub api:update trust-provenance/hermes/1.0.0 --file openapi.json
+        env:
+          SWAGGERHUB_API_KEY: ${{ secrets.SWAGGERHUB_API_KEY }}
