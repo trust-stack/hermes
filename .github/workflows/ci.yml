@@ -114,10 +114,21 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Determine API Version
+        id: api_version
+        run: echo "::set-output name=version::$(echo ${GITHUB_SHA:0:10})"
+
       - name: Install SwaggerHub CLI
         run: npm i -g swaggerhub-cli
 
-      - name: Publish to SwaggerHub
-        run: swaggerhub api:update trust-provenance/hermes/1.0 --file openapi.json --force
+      - name: Publish to SwaggerHub (with set-default)
+        if: github.ref == 'refs/heads/main'
+        run: swaggerhub api:create trust-provenance/hermes/${{ steps.api_version.outputs.version }} --file openapi.json --set-default
+        env:
+          SWAGGERHUB_API_KEY: ${{ secrets.SWAGGERHUB_API_KEY }}
+
+      - name: Publish to SwaggerHub (without set-default)
+        if: github.ref != 'refs/heads/main'
+        run: swaggerhub api:create trust-provenance/hermes/${{ steps.api_version.outputs.version }} --file openapi.json
         env:
           SWAGGERHUB_API_KEY: ${{ secrets.SWAGGERHUB_API_KEY }}
