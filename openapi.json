@@ -1,6 +1,83 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/link-sets": {
+      "post": {
+        "operationId": "LinkSetController_create",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      },
+      "put": {
+        "operationId": "LinkSetController_update",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkSetDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "get": {
+        "operationId": "LinkSetController_getMany",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/link-sets/{id}": {
+      "get": {
+        "operationId": "LinkSetController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "operationId": "LinkSetController_remove",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/{identifier}": {
       "get": {
         "operationId": "ResolverController_resolve",
@@ -90,6 +167,24 @@
             "description": ""
           }
         }
+      },
+      "delete": {
+        "operationId": "ExternalResolveController_delete",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
       }
     }
   },
@@ -103,6 +198,10 @@
   "servers": [],
   "components": {
     "schemas": {
+      "LinkSetDto": {
+        "type": "object",
+        "properties": {}
+      },
       "ExternalResolverSetDto": {
         "type": "object",
         "properties": {}

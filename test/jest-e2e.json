@@ -9,13 +9,13 @@
   "globalSetup": "./e2e.setup.ts",
   "globalTeardown": "./e2e.teardown.ts",
   "reporters": [
-      "default",
-      [
-        "jest-junit",
-        {
-          "outputDirectory": "./reports/junit",
-          "outputName": "e2e-results.xml"
-        }
-      ]
+    "default",
+    [
+      "jest-junit",
+      {
+        "outputDirectory": "./reports/junit",
+        "outputName": "e2e-results.xml"
+      }
     ]
+  ]
 }

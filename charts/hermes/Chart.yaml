@@ -4,4 +4,4 @@ description: A Helm chart for Kubernetes
 type: application
 version: 0.1.0
 appVersion: "1.16.0"
-icon: 'https://imagedelivery.net/KrqWw3MfFI3Up2T0vHiP1g/a2c66303-c11a-4250-7e32-4c144af48000/public'
+icon: "https://imagedelivery.net/KrqWw3MfFI3Up2T0vHiP1g/a2c66303-c11a-4250-7e32-4c144af48000/public"

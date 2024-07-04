@@ -1,21 +1,21 @@
-replicaCount: 1 
+replicaCount: 1
 
-image: 
+image:
   repository: trustprovenance/hermes
-  tag: latest 
-  pullPolicy: Always 
+  tag: latest
+  pullPolicy: Always
 
 service:
   name: hermes-service
-  type: ClusterIP 
+  type: ClusterIP
   port: 8080
 
 postgres:
   image:
-    repository:  postgres 
+    repository: postgres
     tag: latest
-    pullPolicy: IfNotPresent 
-  service: 
+    pullPolicy: IfNotPresent
+  service:
     name: postgres
     port: 5432
   username: hermes
@@ -31,5 +31,5 @@ resources:
     memory: 128Mi
 
 hermesService:
-  port: 8080 
+  port: 8080
   databaseUrl: postgres://hermes:password@hermes:5432/hermes

@@ -25,7 +25,7 @@ model Link {
   href         String
   title        String
   lang         String[]
-  linkset      Linkset  @relation(fields: [linksetId], references: [id])
+  linkset      Linkset  @relation(fields: [linksetId], references: [id], onDelete: Cascade)
   linksetId    String
 }
 

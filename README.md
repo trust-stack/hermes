@@ -9,7 +9,26 @@ Hermes Link Resolver is an open-source implementation of a link resolver based o
 - Easy to set up and extend
 - Built with NestJS, Prisma, and PostgreSQL
 
-## Getting Started
+## Deployment
+
+### Helm
+
+1. **Add the Helm repository**
+
+```bash
+helm repo add trust-provenance https://TODO
+helm repo update
+```
+
+2. **Install the Helm chart**
+
+```bash
+helm install hermes trust-provenance/hermes
+```
+
+## Development
+
+### Getting Started
 
 Follow these steps to set up the development environment.
 
@@ -25,18 +44,20 @@ Make sure you have the following installed on your machine:
 ### Setup Instructions
 
 1. **Clone the repository:**
+
 ```bash
 $ git clone https://github.com/trustprovenance/hermes.git
 $ cd hermes
 ```
 
 2. **Copy the example environment file**
-```bash 
+
+```bash
 $ cp .env.sample .env
 ```
 
-3. **(Optional) Update the `.env` file
-If you are going to use a database outside of the one provided in `docker-compose.yaml`, update `.env` to include the necessary connection string.
+3. **(Optional) Update the `.env` file**
+   If you are going to use a database outside of the one provided in `docker-compose.yaml`, update `.env` to include the necessary connection string.
 
 ```
 DATABASE_URL="postgresql://youruser:yourpassword@localhost:5432/yourdatabase?schema=public"
@@ -56,9 +77,9 @@ $ docker-compose up -d
 $ pnpm install
 ```
 
-6. **Generate the prisma client** 
+6. **Generate the prisma client**
 
-```bash 
+```bash
 $ pnpm prisma generate
 ```
 
@@ -70,6 +91,6 @@ $ pnpm prisma migrate dev
 
 8. **Start the development server**
 
-```bash 
+```bash
 $ pnpm run start
 ```

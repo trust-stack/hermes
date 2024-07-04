@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
+  name: { { .Chart.Name } }
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: { { .Values.replicaCount } }
   selector:
     matchLabels:
-      app: {{ .Chart.Name }}
+      app: { { .Chart.Name } }
   template:
     metadata:
       labels:
-        app: {{ .Chart.Name }}
+        app: { { .Chart.Name } }
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: { { .Chart.Name } }
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: { { .Values.image.pullPolicy } }
           ports:
-            - containerPort: {{ .Values.hermesService.port }}
+            - containerPort: { { .Values.hermesService.port } }
           env:
             - name: PORT
               value: "{{ .Values.hermesService.databaseUrl }}"

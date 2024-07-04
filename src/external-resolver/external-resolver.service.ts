@@ -5,18 +5,17 @@ import { ExternalResolverSetDto } from "./external-resolver.dto";
 
 @Injectable()
 export class ExternalResolverService {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   async get(id: string): Promise<ExternalResolverSetDto> {
     return this.prisma.externalResolverSet.findFirst({
       where: {
-        id
+        id,
       },
       include: {
-        resolvers: true
-      }
-    })
-
+        resolvers: true,
+      },
+    });
   }
 
   async upsertExternalResolverSet(dto: ExternalResolverSetDto) {
@@ -64,5 +63,11 @@ export class ExternalResolverService {
         },
       });
     });
+  }
+
+  async delete(id: string): Promise<string> {
+    await this.prisma.linkset.delete({ where: { id } });
+
+    return id;
   }
 }
