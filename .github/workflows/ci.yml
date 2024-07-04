@@ -123,7 +123,7 @@ jobs:
 
       - name: Publish to SwaggerHub (with set-default)
         if: github.ref == 'refs/heads/main'
-        run: swaggerhub api:create trust-provenance/hermes/${{ steps.api_version.outputs.version }} --file openapi.json --set-default
+        run: swaggerhub api:create trust-provenance/hermes/${{ steps.api_version.outputs.version }} --file openapi.json --setdefault
         env:
           SWAGGERHUB_API_KEY: ${{ secrets.SWAGGERHUB_API_KEY }}
 
