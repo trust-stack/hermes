@@ -12,7 +12,7 @@ async function generateOpenapi() {
     .setVersion("1.0")
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  const outputPath = path.resolve(process.cwd(), "swagger.json");
+  const outputPath = path.resolve(process.cwd(), "openapi.json");
 
   writeFileSync(outputPath, JSON.stringify(document, null, 2), {
     encoding: "utf8",

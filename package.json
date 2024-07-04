@@ -24,7 +24,8 @@
     "prisma:generate": "npx prisma generate",
     "prisma:push": "npx prisma db push",
     "gen:openapi": "ts-node ./scripts/gen-openapi.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "precommit": "pnpm gen:openapi && git add openapi.json"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
