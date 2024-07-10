@@ -27,7 +27,7 @@ export class LinkSetService {
         orderBy: {
           identifier: "asc",
         },
-        skip: +((pagination.page - 1) * pagination.limit || 0),
+        skip: pagination?.offset ? +pagination?.offset : undefined,
         take: pagination.limit ? +pagination.limit : undefined,
       })
       .then((models) => models?.map(toDto));
