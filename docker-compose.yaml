@@ -1,6 +1,21 @@
 version: "3.8"
 
 services:
+  hermes:
+    build: ./
+    environment:
+      DATABASE_URL: postgresql://hermes:password@postgres:5432/hermes?schema=public
+      NODE_ENV: development
+    depends_on:
+      - postgres
+    networks:
+      - hermes-network
+    volumes:
+      - .:/user/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -10,3 +25,9 @@ services:
       POSTGRES_DB: hermes
     ports:
       - "5432:5432"
+    networks:
+      - hermes-network
+
+networks:
+  hermes-network:
+    driver: bridge

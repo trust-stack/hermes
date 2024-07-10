@@ -19,7 +19,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LinkSetDto"
+                "$ref": "#/components/schemas/UpsertLinkSetDto"
               }
             }
           }
@@ -118,7 +118,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExternalResolverSetDto"
+                "$ref": "#/components/schemas/UpsertExternalResolverSetDto"
               }
             }
           }
@@ -137,7 +137,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExternalResolverSetDto"
+                "$ref": "#/components/schemas/UpsertExternalResolverSetDto"
               }
             }
           }
@@ -198,11 +198,11 @@
   "servers": [],
   "components": {
     "schemas": {
-      "LinkSetDto": {
+      "UpsertLinkSetDto": {
         "type": "object",
         "properties": {}
       },
-      "ExternalResolverSetDto": {
+      "UpsertExternalResolverSetDto": {
         "type": "object",
         "properties": {}
       }

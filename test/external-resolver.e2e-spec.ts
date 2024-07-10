@@ -2,7 +2,7 @@ import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import * as request from "supertest";
 import { AppModule } from "../src/app.module";
-import { ExternalResolverSetDto } from "../src/external-resolver/external-resolver.dto";
+import { UpsertExternalResolverSetDto } from "../src/external-resolver/external-resolver.dto";
 import { PrismaService } from "../src/prisma/prisma.service";
 
 describe("ExternalResolverController (e2e)", () => {
@@ -25,7 +25,7 @@ describe("ExternalResolverController (e2e)", () => {
   });
 
   it("/external-resolvers (POST)", () => {
-    const dto: ExternalResolverSetDto = {
+    const dto: UpsertExternalResolverSetDto = {
       pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
       resolvers: [
         {
@@ -55,7 +55,7 @@ describe("ExternalResolverController (e2e)", () => {
   });
 
   it("/external-resolvers (PUT)", () => {
-    const dto: ExternalResolverSetDto = {
+    const dto: UpsertExternalResolverSetDto = {
       pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
       resolvers: [
         {
@@ -100,7 +100,7 @@ describe("ExternalResolverController (e2e)", () => {
    */
   it("should create, get, and resolve an external resolver set.", async () => {
     let id: string;
-    const dto: ExternalResolverSetDto = {
+    const dto: UpsertExternalResolverSetDto = {
       pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
       resolvers: [
         // New South Wales

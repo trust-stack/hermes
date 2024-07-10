@@ -1,7 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { v4 as uuid } from "uuid";
 import { PrismaService } from "../prisma/prisma.service";
-import { ExternalResolverSetDto } from "./external-resolver.dto";
+import {
+  ExternalResolverSetDto,
+  UpsertExternalResolverSetDto,
+} from "./external-resolver.dto";
 
 @Injectable()
 export class ExternalResolverService {
@@ -18,7 +21,7 @@ export class ExternalResolverService {
     });
   }
 
-  async upsertExternalResolverSet(dto: ExternalResolverSetDto) {
+  async upsertExternalResolverSet(dto: UpsertExternalResolverSetDto) {
     return this.prisma.$transaction(async (tx) => {
       const id = dto.id || uuid();
 
