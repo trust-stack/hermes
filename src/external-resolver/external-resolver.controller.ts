@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from "@nestjs/common";
+import { PaginationDto } from "src/shared/dto";
 import { UpsertExternalResolverSetDto } from "./external-resolver.dto";
 import { ExternalResolverService } from "./external-resolver.service";
 
@@ -29,6 +31,11 @@ export class ExternalResolveController {
   @Get(":id")
   async get(@Param("id") id: string) {
     return this.externalResolverService.get(id);
+  }
+
+  @Get()
+  async getMany(@Query() paginationDto: PaginationDto) {
+    return this.externalResolverService.getMany(paginationDto);
   }
 
   @Delete(":id")

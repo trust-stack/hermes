@@ -78,37 +78,6 @@
         }
       }
     },
-    "/{identifier}": {
-      "get": {
-        "operationId": "ResolverController_resolve",
-        "parameters": [
-          {
-            "name": "identifier",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/.well-known/resolver": {
-      "get": {
-        "operationId": "ResolverController_getResolverMetadata",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/external-resolvers": {
       "post": {
         "operationId": "ExternalResolveController_create",
@@ -147,6 +116,15 @@
             "description": ""
           }
         }
+      },
+      "get": {
+        "operationId": "ExternalResolveController_getMany",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
       }
     },
     "/external-resolvers/{id}": {
@@ -180,6 +158,37 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/{identifier}": {
+      "get": {
+        "operationId": "ResolverController_resolve",
+        "parameters": [
+          {
+            "name": "identifier",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/.well-known/resolver": {
+      "get": {
+        "operationId": "ResolverController_getResolverMetadata",
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
