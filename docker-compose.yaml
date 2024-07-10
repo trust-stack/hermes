@@ -5,6 +5,7 @@ services:
     build: ./
     environment:
       DATABASE_URL: postgresql://hermes:password@postgres:5432/hermes?schema=public
+      NODE_ENV: development
     depends_on:
       - postgres
     networks:

@@ -2,7 +2,7 @@ import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import * as request from "supertest";
 import { AppModule } from "../src/app.module";
-import { LinkSetDto } from "../src/link-set/link-set.dto";
+import { LinkSetDto, UpsertLinkSetDto } from "../src/link-set/link-set.dto";
 import { PrismaService } from "../src/prisma/prisma.service";
 
 describe("LinkSet (e2e)", () => {
@@ -32,7 +32,7 @@ describe("LinkSet (e2e)", () => {
    * 3. Verify the link set return
    */
   it("/link-sets (POST)", async () => {
-    const dto: LinkSetDto = {
+    const dto: UpsertLinkSetDto = {
       identifier: "09524000059109",
       links: [
         {
@@ -49,7 +49,19 @@ describe("LinkSet (e2e)", () => {
       .send(dto)
       .expect(201)
       .then((response) => {
-        expect(response.body).toEqual(expect.objectContaining(dto));
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            identifier: "09524000059109",
+            links: [
+              expect.objectContaining({
+                relationType: "describedBy",
+                href: "https://example.com",
+                title: "Product Description",
+                lang: ["en"],
+              }),
+            ],
+          }),
+        );
       });
 
     await request(app.getHttpServer())
@@ -59,7 +71,7 @@ describe("LinkSet (e2e)", () => {
         expect(response.body).toEqual(
           expect.objectContaining({
             linkSet: [
-              {
+              expect.objectContaining({
                 anchor: "09524000059109",
                 describedBy: [
                   {
@@ -68,7 +80,7 @@ describe("LinkSet (e2e)", () => {
                     lang: ["en"],
                   },
                 ],
-              },
+              }),
             ],
           }),
         );
@@ -84,7 +96,7 @@ describe("LinkSet (e2e)", () => {
   it("/link-sets/:id (GET)", async () => {
     let dtoResponse: LinkSetDto;
 
-    const dto: LinkSetDto = {
+    const dto: UpsertLinkSetDto = {
       identifier: "09524000059109",
       links: [
         {
@@ -102,7 +114,19 @@ describe("LinkSet (e2e)", () => {
       .expect(201)
       .then((response) => {
         dtoResponse = response.body;
-        expect(response.body).toEqual(expect.objectContaining(dto));
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            identifier: "09524000059109",
+            links: [
+              expect.objectContaining({
+                relationType: "describedBy",
+                href: "https://example.com",
+                title: "Product Description",
+                lang: ["en"],
+              }),
+            ],
+          }),
+        );
       });
 
     await request(app.getHttpServer())
@@ -112,7 +136,15 @@ describe("LinkSet (e2e)", () => {
         expect(response.body).toEqual(
           expect.objectContaining({
             id: dtoResponse.id,
-            ...dto,
+            identifier: "09524000059109",
+            links: [
+              expect.objectContaining({
+                relationType: "describedBy",
+                href: "https://example.com",
+                title: "Product Description",
+                lang: ["en"],
+              }),
+            ],
           }),
         );
       });
@@ -175,7 +207,7 @@ describe("LinkSet (e2e)", () => {
   it("/link-sets (DELETE)", async () => {
     let responseDto: LinkSetDto;
 
-    const dto: LinkSetDto = {
+    const dto: UpsertLinkSetDto = {
       identifier: "09524000059109",
       links: [
         {
@@ -193,7 +225,19 @@ describe("LinkSet (e2e)", () => {
       .expect(201)
       .then((response) => {
         responseDto = response.body;
-        expect(response.body).toEqual(expect.objectContaining(dto));
+        expect(response.body).toEqual(
+          expect.objectContaining({
+            identifier: "09524000059109",
+            links: [
+              expect.objectContaining({
+                relationType: "describedBy",
+                href: "https://example.com",
+                title: "Product Description",
+                lang: ["en"],
+              }),
+            ],
+          }),
+        );
       });
 
     await request(app.getHttpServer())

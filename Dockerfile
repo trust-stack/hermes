@@ -22,5 +22,5 @@ RUN pnpm run build
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Run the application
-CMD ["pnpm", "run", "start:dev"]
+# Push prisma schema, and start
+CMD ["pnpm", "run", "start:dev:push"]

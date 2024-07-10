@@ -14,13 +14,17 @@ datasource db {
 }
 
 model Linkset {
-  id         String @id @default(uuid())
-  identifier String @unique()
+  id         String   @id @default(uuid())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  identifier String   @unique()
   links      Link[]
 }
 
 model Link {
   id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   relationType String
   href         String
   title        String
@@ -31,12 +35,16 @@ model Link {
 
 model ExternalResolverSet {
   id        String             @id @default(uuid())
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
   pattern   String
   resolvers ExternalResolver[]
 }
 
 model ExternalResolver {
   id                    String              @id @default(uuid())
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
   href                  String
   pattern               String
   externalResolverSet   ExternalResolverSet @relation(fields: [externalResolverSetId], references: [id])

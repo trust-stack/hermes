@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from "@nestjs/common";
-import { ExternalResolverSetDto } from "./external-resolver.dto";
+import { UpsertExternalResolverSetDto } from "./external-resolver.dto";
 import { ExternalResolverService } from "./external-resolver.service";
 
 @Controller("external-resolvers")
@@ -17,12 +17,12 @@ export class ExternalResolveController {
   ) {}
 
   @Post()
-  async create(@Body() dto: ExternalResolverSetDto) {
+  async create(@Body() dto: UpsertExternalResolverSetDto) {
     return this.externalResolverService.upsertExternalResolverSet(dto);
   }
 
   @Put()
-  async update(@Body() dto: ExternalResolverSetDto) {
+  async update(@Body() dto: UpsertExternalResolverSetDto) {
     return this.externalResolverService.upsertExternalResolverSet(dto);
   }
 

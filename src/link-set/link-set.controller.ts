@@ -10,7 +10,7 @@ import {
   Query,
 } from "@nestjs/common";
 import { PaginationDto } from "../shared/dto";
-import { LinkSetDto } from "./link-set.dto";
+import { UpsertLinkSetDto } from "./link-set.dto";
 import { LinkSetService } from "./link-set.service";
 
 @Controller("link-sets")
@@ -18,12 +18,12 @@ export class LinkSetController {
   constructor(private readonly linkSetService: LinkSetService) {}
 
   @Post()
-  async create(@Body() dto: Omit<LinkSetDto, "id">) {
+  async create(@Body() dto: Omit<UpsertLinkSetDto, "id">) {
     return this.linkSetService.upsert(dto);
   }
 
   @Put()
-  async update(@Body() dto: LinkSetDto) {
+  async update(@Body() dto: UpsertLinkSetDto) {
     return this.linkSetService.upsert(dto);
   }
 

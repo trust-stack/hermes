@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 import { v4 as uuid } from "uuid";
 import { PrismaService } from "../prisma/prisma.service";
 import { PaginationDto } from "../shared/dto";
-import { LinkSetDto } from "./link-set.dto";
+import { LinkSetDto, UpsertLinkSetDto } from "./link-set.dto";
 
 @Injectable()
 export class LinkSetService {
@@ -38,7 +38,7 @@ export class LinkSetService {
     return id;
   }
 
-  async upsert(dto: LinkSetDto) {
+  async upsert(dto: UpsertLinkSetDto) {
     return this.prisma.$transaction(async (tx) => {
       const id = dto.id || uuid();
 
@@ -106,11 +106,15 @@ const toDto = (prismaDto: PrismaDTO): LinkSetDto => {
   return {
     id: prismaDto.id,
     identifier: prismaDto.identifier,
+    updatedAt: prismaDto.updatedAt,
+    createdAt: prismaDto.createdAt,
     links: prismaDto.links?.map((l) => ({
       relationType: l.relationType,
       href: l.href,
       title: l.title,
       lang: l.lang,
+      updatedAt: l.updatedAt,
+      createdAt: l.createdAt,
     })),
   };
 };
