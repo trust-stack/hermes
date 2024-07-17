@@ -57,6 +57,7 @@ export class LinkSetService {
           },
           create: {
             id,
+            qualifier: dto.qualifier,
             identifier: dto.identifier,
             links: {
               createMany: {
@@ -71,6 +72,7 @@ export class LinkSetService {
           },
           update: {
             id,
+            qualifier: dto.qualifier,
             identifier: dto.identifier,
             links: {
               createMany: {
@@ -106,6 +108,7 @@ const toDto = (prismaDto: PrismaDTO): LinkSetDto => {
   return {
     id: prismaDto.id,
     identifier: prismaDto.identifier,
+    qualifier: prismaDto.qualifier,
     updatedAt: prismaDto.updatedAt,
     createdAt: prismaDto.createdAt,
     links: prismaDto.links?.map((l) => ({

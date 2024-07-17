@@ -14,11 +14,17 @@ datasource db {
 }
 
 model Linkset {
-  id         String   @id @default(uuid())
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  identifier String   @unique()
-  links      Link[]
+  id              String    @id @default(uuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  qualifier       String
+  identifier      String
+  links           Link[]
+  childLinkSets   Linkset[] @relation(name: "ChildParent")
+  parentLinkSet   Linkset?  @relation(name: "ChildParent", fields: [parentLinkSetId], references: [id], onDelete: Cascade)
+  parentLinkSetId String?
+
+  @@unique([qualifier, identifier])
 }
 
 model Link {
@@ -33,20 +39,16 @@ model Link {
   linksetId    String
 }
 
-model ExternalResolverSet {
-  id        String             @id @default(uuid())
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
-  pattern   String
-  resolvers ExternalResolver[]
-}
-
 model ExternalResolver {
-  id                    String              @id @default(uuid())
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt
-  href                  String
-  pattern               String
-  externalResolverSet   ExternalResolverSet @relation(fields: [externalResolverSetId], references: [id])
-  externalResolverSetId String
+  id                       String             @id @default(uuid())
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+  qualifier                String
+  pattern                  String
+  href                     String
+  childExternalResolvers   ExternalResolver[] @relation(name: "ChildParent")
+  parentExternalResolver   ExternalResolver?  @relation(name: "ChildParent", fields: [parentExternalResolverId], references: [id], onDelete: Cascade)
+  parentExternalResolverId String?
+
+  @@unique([qualifier, pattern])
 }

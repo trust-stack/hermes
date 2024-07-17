@@ -14,6 +14,9 @@ export class UpsertLinkSetDto {
   @IsString()
   identifier: string;
 
+  @IsString()
+  qualifier: string;
+
   @IsArray()
   @Length(1)
   @ValidateNested({ each: true })
@@ -41,6 +44,9 @@ export class LinkSetDto {
 
   @IsString()
   identifier?: string;
+
+  @IsString()
+  qualifier: string;
 
   @IsArray()
   @Length(1)

@@ -34,6 +34,7 @@ describe("LinkSet (e2e)", () => {
   it("/link-sets (POST)", async () => {
     const dto: UpsertLinkSetDto = {
       identifier: "09524000059109",
+      qualifier: "01",
       links: [
         {
           relationType: "describedBy",
@@ -52,6 +53,7 @@ describe("LinkSet (e2e)", () => {
         expect(response.body).toEqual(
           expect.objectContaining({
             identifier: "09524000059109",
+            qualifier: "01",
             links: [
               expect.objectContaining({
                 relationType: "describedBy",
@@ -65,14 +67,14 @@ describe("LinkSet (e2e)", () => {
       });
 
     await request(app.getHttpServer())
-      .get("/09524000059109")
+      .get("/01/09524000059109")
       .expect(200)
       .expect((response) => {
         expect(response.body).toEqual(
           expect.objectContaining({
             linkSet: [
               expect.objectContaining({
-                anchor: "09524000059109",
+                anchor: "/01/09524000059109",
                 describedBy: [
                   {
                     href: "https://example.com",
@@ -98,6 +100,7 @@ describe("LinkSet (e2e)", () => {
 
     const dto: UpsertLinkSetDto = {
       identifier: "09524000059109",
+      qualifier: "01",
       links: [
         {
           relationType: "describedBy",
@@ -117,6 +120,7 @@ describe("LinkSet (e2e)", () => {
         expect(response.body).toEqual(
           expect.objectContaining({
             identifier: "09524000059109",
+            qualifier: "01",
             links: [
               expect.objectContaining({
                 relationType: "describedBy",
@@ -137,6 +141,7 @@ describe("LinkSet (e2e)", () => {
           expect.objectContaining({
             id: dtoResponse.id,
             identifier: "09524000059109",
+            qualifier: "01",
             links: [
               expect.objectContaining({
                 relationType: "describedBy",
@@ -165,6 +170,7 @@ describe("LinkSet (e2e)", () => {
           prismaService.linkset.create({
             data: {
               identifier: `09524000059109${index}`,
+              qualifier: "01",
               links: {
                 createMany: {
                   data: [
@@ -209,6 +215,7 @@ describe("LinkSet (e2e)", () => {
 
     const dto: UpsertLinkSetDto = {
       identifier: "09524000059109",
+      qualifier: "01",
       links: [
         {
           relationType: "describedBy",
@@ -228,6 +235,7 @@ describe("LinkSet (e2e)", () => {
         expect(response.body).toEqual(
           expect.objectContaining({
             identifier: "09524000059109",
+            qualifier: "01",
             links: [
               expect.objectContaining({
                 relationType: "describedBy",

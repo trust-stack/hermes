@@ -9,27 +9,31 @@ import {
 
 export class UpsertExternalResolverDto {
   @IsString()
+  id?: string;
+
+  @IsString()
   href: string;
 
   @IsString()
   pattern: string;
-}
-
-export class UpsertExternalResolverSetDto {
-  @IsString()
-  id?: string;
 
   @IsString()
-  pattern: string;
+  qualifier: string;
 
   @IsArray()
   @Length(1)
   @ValidateNested({ each: true })
   @Type(() => UpsertExternalResolverDto)
-  resolvers: UpsertExternalResolverDto[];
+  childExternalResolvers?: UpsertExternalResolverDto[];
 }
 
 export class ExternalResolverDto {
+  @IsString()
+  id?: string;
+
+  @IsString()
+  qualifier: string;
+
   @IsString()
   href: string;
 
@@ -41,24 +45,10 @@ export class ExternalResolverDto {
 
   @IsDate()
   updatedAt: Date;
-}
-
-export class ExternalResolverSetDto {
-  @IsString()
-  id?: string;
-
-  @IsString()
-  pattern: string;
 
   @IsArray()
   @Length(1)
   @ValidateNested({ each: true })
   @Type(() => ExternalResolverDto)
-  resolvers: ExternalResolverDto[];
-
-  @IsDate()
-  createdAt: Date;
-
-  @IsDate()
-  updatedAt: Date;
+  childExternalResolvers?: ExternalResolverDto[];
 }
