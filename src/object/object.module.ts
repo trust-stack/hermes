@@ -8,5 +8,6 @@ import { ObjectService } from "./object.service";
   imports: [PrismaModule, S3Module],
   controllers: [ObjectController],
   providers: [ObjectService],
+  exports: [ObjectService],
 })
 export class ObjectModule {}
