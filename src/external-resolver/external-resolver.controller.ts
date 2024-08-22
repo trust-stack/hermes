@@ -9,7 +9,7 @@ import {
   Query,
 } from "@nestjs/common";
 import { PaginationDto } from "src/shared/dto";
-import { UpsertExternalResolverSetDto } from "./external-resolver.dto";
+import { UpsertExternalResolverDto } from "./external-resolver.dto";
 import { ExternalResolverService } from "./external-resolver.service";
 
 @Controller("external-resolvers")
@@ -19,12 +19,12 @@ export class ExternalResolveController {
   ) {}
 
   @Post()
-  async create(@Body() dto: UpsertExternalResolverSetDto) {
+  async create(@Body() dto: UpsertExternalResolverDto) {
     return this.externalResolverService.upsertExternalResolverSet(dto);
   }
 
   @Put()
-  async update(@Body() dto: UpsertExternalResolverSetDto) {
+  async update(@Body() dto: UpsertExternalResolverDto) {
     return this.externalResolverService.upsertExternalResolverSet(dto);
   }
 

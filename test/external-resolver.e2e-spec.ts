@@ -2,7 +2,7 @@ import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
 import * as request from "supertest";
 import { AppModule } from "../src/app.module";
-import { UpsertExternalResolverSetDto } from "../src/external-resolver/external-resolver.dto";
+import { UpsertExternalResolverDto } from "../src/external-resolver/external-resolver.dto";
 import { PrismaService } from "../src/prisma/prisma.service";
 
 describe("ExternalResolverController (e2e)", () => {
@@ -21,18 +21,14 @@ describe("ExternalResolverController (e2e)", () => {
   });
 
   beforeEach(async () => {
-    await prismaService.linkset.deleteMany();
+    await prismaService.externalResolver.deleteMany();
   });
 
   it("/external-resolvers (POST)", () => {
-    const dto: UpsertExternalResolverSetDto = {
-      pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
-      resolvers: [
-        {
-          pattern: `^(N).*`,
-          href: "https://nsw-pic.com",
-        },
-      ],
+    const dto: UpsertExternalResolverDto = {
+      pattern: `^(N).*`,
+      qualifier: "PIC",
+      href: "https://nsw-pic.com",
     };
 
     return request(app.getHttpServer())
@@ -42,27 +38,19 @@ describe("ExternalResolverController (e2e)", () => {
       .then((response) => {
         expect(response.body).toEqual(
           expect.objectContaining({
-            pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
-            resolvers: expect.arrayContaining([
-              expect.objectContaining({
-                pattern: `^(N).*`,
-                href: "https://nsw-pic.com",
-              }),
-            ]),
+            pattern: `^(N).*`,
+            qualifier: "PIC",
+            href: "https://nsw-pic.com",
           }),
         );
       });
   });
 
   it("/external-resolvers (PUT)", () => {
-    const dto: UpsertExternalResolverSetDto = {
+    const dto: UpsertExternalResolverDto = {
       pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
-      resolvers: [
-        {
-          pattern: `^(N).*`,
-          href: "https://nsw-pic.com",
-        },
-      ],
+      qualifier: "PIC",
+      href: "https://iscc.com",
     };
 
     return request(app.getHttpServer())
@@ -73,12 +61,8 @@ describe("ExternalResolverController (e2e)", () => {
         expect(response.body).toEqual(
           expect.objectContaining({
             pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
-            resolvers: expect.arrayContaining([
-              expect.objectContaining({
-                pattern: `^(N).*`,
-                href: "https://nsw-pic.com",
-              }),
-            ]),
+            qualifier: "PIC",
+            href: "https://iscc.com",
           }),
         );
       });
@@ -100,78 +84,60 @@ describe("ExternalResolverController (e2e)", () => {
    */
   it("should create, get, and resolve an external resolver set.", async () => {
     let id: string;
-    const dto: UpsertExternalResolverSetDto = {
-      pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
-      resolvers: [
-        // New South Wales
-        {
-          pattern: `^(N).*`,
-          href: "https://nsw-pic.com",
-        },
-        // South Australia
-        {
-          pattern: `^(S).*`,
-          href: "https://sa-pic.com",
-        },
-      ],
+    const nswResolver: UpsertExternalResolverDto = {
+      qualifier: "PIC",
+      pattern: `^(N).*`,
+      href: "https://nsw-pic.com",
     };
 
     // Create external resolver set.
     await request(app.getHttpServer())
       .post("/external-resolvers")
-      .send(dto)
+      .send(nswResolver)
       .expect(201)
       .then((response) => {
         id = response.body["id"];
         expect(response.body).toEqual(
           expect.objectContaining({
-            pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
-            resolvers: expect.arrayContaining([
-              expect.objectContaining({
-                pattern: `^(N).*`,
-                href: "https://nsw-pic.com",
-              }),
-              expect.objectContaining({
-                pattern: `^(S).*`,
-                href: "https://sa-pic.com",
-              }),
-            ]),
+            qualifier: "PIC",
+            pattern: `^(N).*`,
+            href: "https://nsw-pic.com",
           }),
         );
       });
 
+    const saResolver: UpsertExternalResolverDto = {
+      qualifier: "PIC",
+      pattern: `^(S).*`,
+      href: "https://sa-pic.com",
+    };
+
+    // Create external resolver set.
     await request(app.getHttpServer())
-      .get(`/external-resolvers/${id}`)
-      .expect(200)
+      .post("/external-resolvers")
+      .send(saResolver)
+      .expect(201)
       .then((response) => {
+        id = response.body["id"];
         expect(response.body).toEqual(
           expect.objectContaining({
-            id,
-            pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
-            resolvers: expect.arrayContaining([
-              expect.objectContaining({
-                pattern: `^(N).*`,
-                href: "https://nsw-pic.com",
-              }),
-              expect.objectContaining({
-                pattern: `^(S).*`,
-                href: "https://sa-pic.com",
-              }),
-            ]),
+            qualifier: "PIC",
+            pattern: `^(S).*`,
+            href: "https://sa-pic.com",
           }),
         );
       });
 
     // Resolve NSW PIC
     await request(app.getHttpServer())
-      .get("/NSW123456")
+      .get("/PIC/NSW123456")
       .expect(302)
-      .expect("Location", "https://nsw-pic.com/NSW123456");
+      .expect("Location", "https://nsw-pic.com/PIC/NSW123456");
 
     // Resolve SA PIC
     await request(app.getHttpServer())
-      .get("/SA123456")
+      .get("/PIC/SA123456")
       .expect(302)
-      .expect("Location", "https://sa-pic.com/SA123456");
+      .expect("Location", "https://sa-pic.com/PIC/SA123456");
   });
 });

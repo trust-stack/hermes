@@ -87,7 +87,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpsertExternalResolverSetDto"
+                "$ref": "#/components/schemas/UpsertExternalResolverDto"
               }
             }
           }
@@ -106,7 +106,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpsertExternalResolverSetDto"
+                "$ref": "#/components/schemas/UpsertExternalResolverDto"
               }
             }
           }
@@ -165,19 +165,10 @@
         }
       }
     },
-    "/{identifier}": {
+    "/*": {
       "get": {
         "operationId": "ResolverController_resolve",
-        "parameters": [
-          {
-            "name": "identifier",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -211,7 +202,7 @@
         "type": "object",
         "properties": {}
       },
-      "UpsertExternalResolverSetDto": {
+      "UpsertExternalResolverDto": {
         "type": "object",
         "properties": {}
       }
