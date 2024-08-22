@@ -18,3 +18,20 @@ export class CreateObjectResponseDto {
   @IsString()
   presignedUrl: string;
 }
+
+export class ObjectDto {
+  @IsString()
+  id: string;
+
+  @IsString()
+  name: string;
+
+  @IsString()
+  mimeType: string;
+
+  @IsInt()
+  size: number;
+
+  @IsString()
+  url: string;
+}

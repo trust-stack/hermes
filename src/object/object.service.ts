@@ -1,7 +1,13 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
-import { S3Service } from "src/s3/s3.service";
-import { CreateObjectDto, CreateObjectResponseDto } from "./object.dto";
+import { Object } from "@prisma/client";
+import { PrismaService } from "../prisma/prisma.service";
+import { S3Service } from "../s3/s3.service";
+import { PaginationDto } from "../shared/dto";
+import {
+  CreateObjectDto,
+  CreateObjectResponseDto,
+  ObjectDto,
+} from "./object.dto";
 
 @Injectable()
 export class ObjectService {
@@ -9,6 +15,34 @@ export class ObjectService {
     private readonly s3: S3Service,
     private readonly prisma: PrismaService,
   ) {}
+
+  public async get(id: string): Promise<ObjectDto> {
+    return this.prisma.object
+      .findUnique({
+        where: {
+          id,
+        },
+      })
+      .then(this.toDto);
+  }
+
+  // TODO: should clear from bucket in future
+  public async delete(id: string): Promise<string> {
+    await this.prisma.object.delete({ where: { id } });
+    return id;
+  }
+
+  public async getMany(pagination: PaginationDto): Promise<ObjectDto[]> {
+    return this.prisma.object
+      .findMany({
+        orderBy: {
+          name: "asc",
+        },
+        skip: pagination?.offset ? +pagination?.offset : undefined,
+        take: pagination.limit ? +pagination.limit : undefined,
+      })
+      .then((dtos) => Promise.all([...dtos.map(this.toDto)]));
+  }
 
   /**
    * Create a Object in persistance, and generate a presigned PUT url
@@ -44,5 +78,17 @@ export class ObjectService {
    */
   public async generateGetPresignedUrl(objectKey: string) {
     return this.s3.generateGetPresignedUrl(objectKey);
+  }
+
+  private async toDto(prismaDto: Object): Promise<ObjectDto> {
+    const url = await this.generateGetPresignedUrl(prismaDto.id);
+
+    return {
+      id: prismaDto.id,
+      name: prismaDto.name,
+      mimeType: prismaDto.mimeType,
+      size: prismaDto.size,
+      url,
+    };
   }
 }

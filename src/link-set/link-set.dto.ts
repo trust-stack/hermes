@@ -1,7 +1,9 @@
+import { LinkType } from "@prisma/client";
 import { Type } from "class-transformer";
 import {
   IsArray,
   IsDate,
+  IsEnum,
   IsString,
   Length,
   ValidateNested,
@@ -28,8 +30,14 @@ export class UpsertLinkDto {
   @IsString()
   relationType: string;
 
+  @IsEnum(LinkType)
+  type?: LinkType;
+
   @IsString()
-  href: string;
+  href?: string;
+
+  @IsString()
+  objectKey?: string;
 
   @IsString()
   title: string;
@@ -65,8 +73,14 @@ export class LinkDto {
   @IsString()
   relationType: string;
 
+  @IsEnum(LinkType)
+  type: LinkType;
+
   @IsString()
-  href: string;
+  href?: string;
+
+  @IsString()
+  objectKey?: string;
 
   @IsString()
   title: string;
