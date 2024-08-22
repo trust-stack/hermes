@@ -1,6 +1,17 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/presigned-url": {
+      "get": {
+        "operationId": "ObjectController_resolve",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/link-sets": {
       "post": {
         "operationId": "LinkSetController_create",

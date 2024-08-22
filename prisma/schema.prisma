@@ -52,3 +52,11 @@ model ExternalResolver {
 
   @@unique([qualifier, pattern])
 }
+
+model Object {
+  id        String   @id @default(uuid())
+  name      String
+  mimeType  String
+  size      Int
+  createdAt DateTime @default(now())
+}
