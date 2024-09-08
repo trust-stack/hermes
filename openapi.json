@@ -3,16 +3,25 @@
   "paths": {
     "/link-sets": {
       "post": {
-        "operationId": "LinkSetController_create",
+        "operationId": "createLinkSet",
+        "summary": "Create a new Link Set",
         "parameters": [],
         "responses": {
           "201": {
-            "description": ""
+            "description": "The Link Set was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkSet"
+                }
+              }
+            }
           }
         }
       },
       "put": {
-        "operationId": "LinkSetController_update",
+        "operationId": "updateLinkSet",
+        "summary": "Update an existing Link Set",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -25,24 +34,43 @@
           }
         },
         "responses": {
-          "200": {
-            "description": ""
+          "201": {
+            "description": "The Link Set was updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkSet"
+                }
+              }
+            }
           }
         }
       },
       "get": {
-        "operationId": "LinkSetController_getMany",
+        "operationId": "getLinkSets",
+        "summary": "Get all paginated Link Sets",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The Link Sets were found and returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LinkSet"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/link-sets/{id}": {
       "get": {
-        "operationId": "LinkSetController_get",
+        "operationId": "getLinkSet",
+        "summary": "Get a Link Set by ID",
         "parameters": [
           {
             "name": "id",
@@ -55,12 +83,20 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The Link Set was found and returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkSet"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
-        "operationId": "LinkSetController_remove",
+        "operationId": "deleteLinkSet",
+        "summary": "Delete a Link Set by ID",
         "parameters": [
           {
             "name": "id",
@@ -198,9 +234,101 @@
   "servers": [],
   "components": {
     "schemas": {
-      "UpsertLinkSetDto": {
+      "LinkDto": {
         "type": "object",
         "properties": {}
+      },
+      "LinkSet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the Link Set."
+          },
+          "identifier": {
+            "type": "string",
+            "description": "The identifier of the Link Set."
+          },
+          "qualifier": {
+            "type": "string",
+            "description": "The qualifier of the Link Set."
+          },
+          "links": {
+            "description": "The links of the Link Set.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkDto"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The creation date of the Link Set."
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The last update date of the Link Set."
+          }
+        }
+      },
+      "UpsertLinkDto": {
+        "type": "object",
+        "properties": {
+          "relationType": {
+            "type": "string",
+            "description": "The relation type of the link."
+          },
+          "href": {
+            "type": "string",
+            "description": "The href of the link."
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the link."
+          },
+          "lang": {
+            "description": "The language of the link.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "relationType",
+          "href",
+          "title"
+        ]
+      },
+      "UpsertLinkSetDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the Link Set. This causes an UPDATE, not a CREATE."
+          },
+          "identifier": {
+            "type": "string",
+            "description": "The identifier of the Link Set."
+          },
+          "qualifier": {
+            "type": "string",
+            "description": "The qualifier of the Link Set."
+          },
+          "links": {
+            "description": "The links of the Link Set.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpsertLinkDto"
+            }
+          }
+        },
+        "required": [
+          "identifier",
+          "qualifier",
+          "links"
+        ]
       },
       "UpsertExternalResolverDto": {
         "type": "object",
