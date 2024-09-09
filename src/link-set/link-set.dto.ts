@@ -85,27 +85,61 @@ export class UpsertLinkSetDto {
 }
 
 export class LinkDto {
+  @ApiProperty({
+    required: true,
+    description: "The relation type of the link.",
+  })
   @IsString()
   relationType: string;
 
+  @ApiProperty({
+    required: true,
+    description: "The type of the link.",
+    enum: LinkType,
+    enumName: "LinkType",
+  })
   @IsEnum(LinkType)
   type: LinkType;
 
+  @ApiProperty({
+    required: false,
+    description: "The href of the link.",
+  })
   @IsString()
   href?: string;
 
+  @ApiProperty({
+    required: false,
+    description: "The object key of the link, if TYPE is OBJECT.",
+  })
   @IsString()
   objectKey?: string;
 
+  @ApiProperty({
+    required: true,
+    description: "The title of the link",
+  })
   @IsString()
   title: string;
 
+  @ApiProperty({
+    required: false,
+    description: "The language of the link.",
+  })
   @IsArray()
   lang?: string[];
 
+  @ApiProperty({
+    required: true,
+    description: "The creation date of the Link.",
+  })
   @IsDate()
   createdAt: Date;
 
+  @ApiProperty({
+    required: true,
+    description: "The last update date of the Link.",
+  })
   @IsDate()
   updatedAt: Date;
 }
@@ -126,32 +160,32 @@ export class LinkSetDto {
   identifier?: string;
 
   @ApiProperty({
-    required: false,
+    required: true,
     description: "The qualifier of the Link Set.",
   })
   @IsString()
   qualifier: string;
 
   @ApiProperty({
-    required: false,
+    required: true,
     description: "The links of the Link Set.",
-    type: [LinkDto],
+    type: () => [Link],
   })
   @IsArray()
   @Length(1)
   @ValidateNested({ each: true })
-  @Type(() => LinkDto)
-  links: LinkDto[];
+  @Type(() => Link)
+  links: Link[];
 
   @ApiProperty({
-    required: false,
+    required: true,
     description: "The creation date of the Link Set.",
   })
   @IsDate()
   createdAt: Date;
 
   @ApiProperty({
-    required: false,
+    required: true,
     description: "The last update date of the Link Set.",
   })
   @IsDate()

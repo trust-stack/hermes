@@ -374,9 +374,61 @@
           "url"
         ]
       },
-      "LinkDto": {
+      "LinkType": {
+        "type": "string",
+        "description": "The type of the link.",
+        "enum": [
+          "HREF",
+          "OBJECT"
+        ]
+      },
+      "Link": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "relationType": {
+            "type": "string",
+            "description": "The relation type of the link."
+          },
+          "type": {
+            "$ref": "#/components/schemas/LinkType"
+          },
+          "href": {
+            "type": "string",
+            "description": "The href of the link."
+          },
+          "objectKey": {
+            "type": "string",
+            "description": "The object key of the link, if TYPE is OBJECT."
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the link"
+          },
+          "lang": {
+            "description": "The language of the link.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The creation date of the Link."
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The last update date of the Link."
+          }
+        },
+        "required": [
+          "relationType",
+          "type",
+          "title",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "LinkSet": {
         "type": "object",
@@ -397,7 +449,7 @@
             "description": "The links of the Link Set.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/LinkDto"
+              "$ref": "#/components/schemas/Link"
             }
           },
           "createdAt": {
@@ -410,7 +462,13 @@
             "type": "string",
             "description": "The last update date of the Link Set."
           }
-        }
+        },
+        "required": [
+          "qualifier",
+          "links",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "UpsertLinkDto": {
         "type": "object",
@@ -476,7 +534,37 @@
       },
       "UpsertExternalResolverDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the External Resolver. This causes an UPDATE, not a CREATE."
+          },
+          "href": {
+            "type": "string",
+            "description": "The href of the External Resolver."
+          },
+          "pattern": {
+            "type": "string",
+            "description": "The pattern of the External Resolver."
+          },
+          "qualifier": {
+            "type": "string",
+            "description": "The qualifier of the External Resolver."
+          },
+          "childExternalResolvers": {
+            "description": "The creation data of the External Resolver.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "href",
+          "pattern",
+          "qualifier",
+          "childExternalResolvers"
+        ]
       }
     }
   }
