@@ -1,20 +1,24 @@
 import { faker } from "@faker-js/faker";
 import { Test } from "@nestjs/testing";
 import { ExternalResolver, Link, Linkset } from "@prisma/client";
+import { ObjectService } from "../object/object.service";
 import { PrismaService } from "../prisma/prisma.service";
+import { S3Service } from "../s3/s3.service";
 import { ResolverService } from "./resolver.service";
 
 describe("ResolverService", () => {
   let resolverService: ResolverService;
   let prismaService: PrismaService;
+  let objectService: ObjectService;
 
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [PrismaService, ResolverService],
+      providers: [PrismaService, ResolverService, ObjectService, S3Service],
     }).compile();
 
     resolverService = moduleRef.get<ResolverService>(ResolverService);
     prismaService = moduleRef.get<PrismaService>(PrismaService);
+    objectService = moduleRef.get<ObjectService>(ObjectService);
 
     // Mock prisma transaction
     jest
@@ -50,6 +54,8 @@ describe("ResolverService", () => {
               updatedAt: faker.date.recent(),
               lang: ["en"],
               linksetId: "test-link-set",
+              type: "HREF",
+              objectId: undefined,
             },
           ],
         };
@@ -65,6 +71,56 @@ describe("ResolverService", () => {
               "gs1:pip": [
                 {
                   href: "https://example.com",
+                  title: "Product Page",
+                  lang: ["en"],
+                },
+              ],
+            },
+          ],
+        });
+      });
+
+      it("can resolve a single primary identifier and qualifier pair with a OBJECT link type.", async () => {
+        const linkSet: Linkset & {
+          links: Link[];
+        } = {
+          id: "test-link-set",
+          qualifier: "01",
+          identifier: "09524000059109",
+          createdAt: faker.date.recent(),
+          updatedAt: faker.date.recent(),
+          parentLinkSetId: undefined,
+          links: [
+            {
+              id: "test-link",
+              href: "https://example.com",
+              title: "Product Page",
+              relationType: "gs1:pip",
+              createdAt: faker.date.recent(),
+              updatedAt: faker.date.recent(),
+              lang: ["en"],
+              linksetId: "test-link-set",
+              type: "OBJECT",
+              objectId: "some-key",
+            },
+          ],
+        };
+
+        jest
+          .spyOn(prismaService.linkset, "findMany")
+          .mockResolvedValue([linkSet as Linkset]);
+
+        jest
+          .spyOn(objectService, "generateGetPresignedUrl")
+          .mockResolvedValue("https://s3.example.com/some-key");
+
+        expect(await resolverService.resolve("/01/09524000059109")).toEqual({
+          linkSet: [
+            {
+              anchor: "/01/09524000059109",
+              "gs1:pip": [
+                {
+                  href: "https://s3.example.com/some-key",
                   title: "Product Page",
                   lang: ["en"],
                 },
@@ -94,6 +150,8 @@ describe("ResolverService", () => {
               updatedAt: faker.date.recent(),
               lang: ["en"],
               linksetId: "primary-link-set",
+              type: "HREF",
+              objectId: undefined,
             },
           ],
         };
@@ -117,6 +175,8 @@ describe("ResolverService", () => {
               updatedAt: faker.date.recent(),
               lang: ["en"],
               linksetId: "secondary-link-set",
+              type: "HREF",
+              objectId: undefined,
             },
             {
               id: "secondary-foo-link",
@@ -127,6 +187,8 @@ describe("ResolverService", () => {
               updatedAt: faker.date.recent(),
               lang: ["en"],
               linksetId: "secondary-link-set",
+              type: "HREF",
+              objectId: undefined,
             },
           ],
         };

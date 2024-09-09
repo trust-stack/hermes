@@ -1,13 +1,17 @@
 import { Injectable } from "@nestjs/common";
 import { ExternalResolver, Link, Prisma } from "@prisma/client";
 import { mapValues } from "lodash";
+import { ObjectService } from "../object/object.service";
 import { PrismaService } from "../prisma/prisma.service";
 import { LinkDto, ResolvedLinkSetDto } from "./resolver.dto";
 import { parseUrlPath } from "./utils";
 
 @Injectable()
 export class ResolverService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly object: ObjectService,
+  ) {}
 
   async resolve(
     path: string,
@@ -160,13 +164,28 @@ export class ResolverService {
 
     // Flatten link sets returned
     const flattenedLinks: { [relationType: string]: Link[] } = {};
-    sortedLinkSets.forEach((linkSet) => {
-      linkSet.links.forEach((link) => {
+
+    for (const linkSet of sortedLinkSets) {
+      for (const link of linkSet.links) {
+        const href =
+          link.type == "HREF"
+            ? link.href
+            : await this.object.generateGetPresignedUrl(link.objectId);
+        link.href = href;
+
         if (!flattenedLinks[link.relationType])
           flattenedLinks[link.relationType] = [];
         flattenedLinks[link.relationType].push(link);
-      });
-    });
+      }
+    }
+
+    // sortedLinkSets.forEach((linkSet) => {
+    //   linkSet.links.forEach((link) => {
+    //     if (!flattenedLinks[link.relationType])
+    //       flattenedLinks[link.relationType] = [];
+    //     flattenedLinks[link.relationType].push(link);
+    //   });
+    // });
 
     const mappedLinks = mapValues(flattenedLinks, (links) =>
       links.map(

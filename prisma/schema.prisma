@@ -28,15 +28,23 @@ model Linkset {
 }
 
 model Link {
-  id           String   @id @default(uuid())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   relationType String
-  href         String
+  type         LinkType? @default(HREF)
+  href         String?
+  object       Object?   @relation(fields: [objectId], references: [id], onDelete: Cascade)
+  objectId     String?
   title        String
   lang         String[]
-  linkset      Linkset  @relation(fields: [linksetId], references: [id], onDelete: Cascade)
+  linkset      Linkset   @relation(fields: [linksetId], references: [id], onDelete: Cascade)
   linksetId    String
+}
+
+enum LinkType {
+  HREF
+  OBJECT
 }
 
 model ExternalResolver {
@@ -51,4 +59,13 @@ model ExternalResolver {
   parentExternalResolverId String?
 
   @@unique([qualifier, pattern])
+}
+
+model Object {
+  id        String   @id @default(uuid())
+  name      String
+  mimeType  String
+  size      Int
+  createdAt DateTime @default(now())
+  links     Link[]
 }

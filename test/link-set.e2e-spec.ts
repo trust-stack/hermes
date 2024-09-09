@@ -41,6 +41,7 @@ describe("LinkSet (e2e)", () => {
           href: "https://example.com",
           title: "Product Description",
           lang: ["en"],
+          type: "HREF",
         },
       ],
     };
@@ -107,6 +108,7 @@ describe("LinkSet (e2e)", () => {
           href: "https://example.com",
           title: "Product Description",
           lang: ["en"],
+          type: "HREF",
         },
       ],
     };
@@ -179,6 +181,7 @@ describe("LinkSet (e2e)", () => {
                       href: `https://example.com/${index}`,
                       title: `Product ${index} Description`,
                       lang: ["en"],
+                      type: "HREF",
                     },
                   ],
                 },

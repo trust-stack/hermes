@@ -1,48 +1,75 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/link-sets": {
+    "/objects": {
       "post": {
-        "operationId": "LinkSetController_create",
+        "operationId": "createObject",
+        "summary": "Create a new Object",
         "parameters": [],
         "responses": {
           "201": {
-            "description": ""
-          }
-        }
-      },
-      "put": {
-        "operationId": "LinkSetController_update",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpsertLinkSetDto"
+            "description": "The key and presigned URL of the Object.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateObjectResponseDto"
+                }
               }
             }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": ""
           }
         }
       },
       "get": {
-        "operationId": "LinkSetController_getMany",
+        "operationId": "getObjects",
+        "summary": "Get all Objects",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The Objects were found and returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HermesObject"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
-    "/link-sets/{id}": {
+    "/objects/{id}": {
       "get": {
-        "operationId": "LinkSetController_get",
+        "operationId": "getObject",
+        "summary": "Get an Object by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Object was found and returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HermesObject"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "deleteObject",
+        "summary": "Delete an Object by ID",
         "parameters": [
           {
             "name": "id",
@@ -58,9 +85,104 @@
             "description": ""
           }
         }
+      }
+    },
+    "/link-sets": {
+      "post": {
+        "operationId": "createLinkSet",
+        "summary": "Create a new Link Set",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "The Link Set was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkSet"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "updateLinkSet",
+        "summary": "Update an existing Link Set",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpsertLinkSetDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The Link Set was updated.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkSet"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "getLinkSets",
+        "summary": "Get all paginated Link Sets",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Link Sets were found and returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LinkSet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/link-sets/{id}": {
+      "get": {
+        "operationId": "getLinkSet",
+        "summary": "Get a Link Set by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The Link Set was found and returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkSet"
+                }
+              }
+            }
+          }
+        }
       },
       "delete": {
-        "operationId": "LinkSetController_remove",
+        "operationId": "deleteLinkSet",
+        "summary": "Delete a Link Set by ID",
         "parameters": [
           {
             "name": "id",
@@ -80,7 +202,8 @@
     },
     "/external-resolvers": {
       "post": {
-        "operationId": "ExternalResolveController_create",
+        "operationId": "createExternalResolver",
+        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -99,7 +222,8 @@
         }
       },
       "put": {
-        "operationId": "ExternalResolveController_update",
+        "operationId": "updateExternalResolver",
+        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -118,7 +242,8 @@
         }
       },
       "get": {
-        "operationId": "ExternalResolveController_getMany",
+        "operationId": "getManyExternalResolvers",
+        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -129,7 +254,8 @@
     },
     "/external-resolvers/{id}": {
       "get": {
-        "operationId": "ExternalResolveController_get",
+        "operationId": "getExternalResolver",
+        "summary": "",
         "parameters": [
           {
             "name": "id",
@@ -147,7 +273,8 @@
         }
       },
       "delete": {
-        "operationId": "ExternalResolveController_delete",
+        "operationId": "deleteExternalResolver",
+        "summary": "",
         "parameters": [
           {
             "name": "id",
@@ -198,9 +325,154 @@
   "servers": [],
   "components": {
     "schemas": {
-      "UpsertLinkSetDto": {
+      "CreateObjectResponseDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The ID of the object to be created."
+          },
+          "presignedUrl": {
+            "type": "string",
+            "description": "The presigned URL to upload the object to."
+          }
+        },
+        "required": [
+          "key",
+          "presignedUrl"
+        ]
+      },
+      "HermesObject": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the object"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the object"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "The MIME type of the object"
+          },
+          "size": {
+            "type": "number",
+            "description": "The size of the object"
+          },
+          "url": {
+            "type": "string",
+            "description": "A presigned URL of the fetch the object"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "mimeType",
+          "size",
+          "url"
+        ]
+      },
+      "LinkDto": {
         "type": "object",
         "properties": {}
+      },
+      "LinkSet": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the Link Set."
+          },
+          "identifier": {
+            "type": "string",
+            "description": "The identifier of the Link Set."
+          },
+          "qualifier": {
+            "type": "string",
+            "description": "The qualifier of the Link Set."
+          },
+          "links": {
+            "description": "The links of the Link Set.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkDto"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The creation date of the Link Set."
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "The last update date of the Link Set."
+          }
+        }
+      },
+      "UpsertLinkDto": {
+        "type": "object",
+        "properties": {
+          "relationType": {
+            "type": "string",
+            "description": "The relation type of the link."
+          },
+          "href": {
+            "type": "string",
+            "description": "The href of the link."
+          },
+          "objectKey": {
+            "type": "string",
+            "description": "The object key of the link, if TYPE is OBJECT."
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the link."
+          },
+          "lang": {
+            "description": "The language of the link.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "relationType",
+          "href",
+          "title"
+        ]
+      },
+      "UpsertLinkSetDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the Link Set. This causes an UPDATE, not a CREATE."
+          },
+          "identifier": {
+            "type": "string",
+            "description": "The identifier of the Link Set."
+          },
+          "qualifier": {
+            "type": "string",
+            "description": "The qualifier of the Link Set."
+          },
+          "links": {
+            "description": "The links of the Link Set.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UpsertLinkDto"
+            }
+          }
+        },
+        "required": [
+          "identifier",
+          "qualifier",
+          "links"
+        ]
       },
       "UpsertExternalResolverDto": {
         "type": "object",

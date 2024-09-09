@@ -94,3 +94,14 @@ $ pnpm prisma migrate dev
 ```bash
 $ pnpm run start
 ```
+
+## Configuration
+
+| Key                  | Description                                             |
+| -------------------- | ------------------------------------------------------- |
+| DATABASE_URL         | Postgres connection string for database connection.     |
+| S3_ACCESS_KEY_ID     | ID of access key for S3 bucket used for Object Storage. |
+| S3_BUCKET            | S3 Bucket name                                          |
+| S3_ENDPOINT          | Endpoint of S3 bucket                                   |
+| S3_REGION            |                                                         |
+| S3_SECRET_ACCESS_KEY | Secret access key for S3 bucket                         |
