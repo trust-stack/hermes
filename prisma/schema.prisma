@@ -28,17 +28,17 @@ model Linkset {
 }
 
 model Link {
-  id           String   @id @default(uuid())
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id           String    @id @default(uuid())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
   relationType String
-  type         LinkType
+  type         LinkType? @default(HREF)
   href         String?
-  object       Object?  @relation(fields: [objectId], references: [id], onDelete: Cascade)
+  object       Object?   @relation(fields: [objectId], references: [id], onDelete: Cascade)
   objectId     String?
   title        String
   lang         String[]
-  linkset      Linkset  @relation(fields: [linksetId], references: [id], onDelete: Cascade)
+  linkset      Linkset   @relation(fields: [linksetId], references: [id], onDelete: Cascade)
   linksetId    String
 }
 
