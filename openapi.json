@@ -3,27 +3,47 @@
   "paths": {
     "/objects": {
       "post": {
-        "operationId": "ObjectController_resolve",
+        "operationId": "createObject",
+        "summary": "Create a new Object",
         "parameters": [],
         "responses": {
           "201": {
-            "description": ""
+            "description": "The key and presigned URL of the Object.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateObjectResponseDto"
+                }
+              }
+            }
           }
         }
       },
       "get": {
-        "operationId": "ObjectController_getMany",
+        "operationId": "getObjects",
+        "summary": "Get all Objects",
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The Objects were found and returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HermesObject"
+                  }
+                }
+              }
+            }
           }
         }
       }
     },
     "/objects/{id}": {
       "get": {
-        "operationId": "ObjectController_get",
+        "operationId": "getObject",
+        "summary": "Get an Object by ID",
         "parameters": [
           {
             "name": "id",
@@ -36,12 +56,20 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The Object was found and returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HermesObject"
+                }
+              }
+            }
           }
         }
       },
       "delete": {
-        "operationId": "ObjectController_remove",
+        "operationId": "deleteObject",
+        "summary": "Delete an Object by ID",
         "parameters": [
           {
             "name": "id",
@@ -174,7 +202,8 @@
     },
     "/external-resolvers": {
       "post": {
-        "operationId": "ExternalResolveController_create",
+        "operationId": "createExternalResolver",
+        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -193,7 +222,8 @@
         }
       },
       "put": {
-        "operationId": "ExternalResolveController_update",
+        "operationId": "updateExternalResolver",
+        "summary": "",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -212,7 +242,8 @@
         }
       },
       "get": {
-        "operationId": "ExternalResolveController_getMany",
+        "operationId": "getManyExternalResolvers",
+        "summary": "",
         "parameters": [],
         "responses": {
           "200": {
@@ -223,7 +254,8 @@
     },
     "/external-resolvers/{id}": {
       "get": {
-        "operationId": "ExternalResolveController_get",
+        "operationId": "getExternalResolver",
+        "summary": "",
         "parameters": [
           {
             "name": "id",
@@ -241,7 +273,8 @@
         }
       },
       "delete": {
-        "operationId": "ExternalResolveController_delete",
+        "operationId": "deleteExternalResolver",
+        "summary": "",
         "parameters": [
           {
             "name": "id",
@@ -292,6 +325,55 @@
   "servers": [],
   "components": {
     "schemas": {
+      "CreateObjectResponseDto": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "description": "The ID of the object to be created."
+          },
+          "presignedUrl": {
+            "type": "string",
+            "description": "The presigned URL to upload the object to."
+          }
+        },
+        "required": [
+          "key",
+          "presignedUrl"
+        ]
+      },
+      "HermesObject": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the object"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the object"
+          },
+          "mimeType": {
+            "type": "string",
+            "description": "The MIME type of the object"
+          },
+          "size": {
+            "type": "number",
+            "description": "The size of the object"
+          },
+          "url": {
+            "type": "string",
+            "description": "A presigned URL of the fetch the object"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "mimeType",
+          "size",
+          "url"
+        ]
+      },
       "LinkDto": {
         "type": "object",
         "properties": {}
