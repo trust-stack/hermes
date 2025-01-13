@@ -1,16 +1,33 @@
 import { faker } from "@faker-js/faker";
 import { Test } from "@nestjs/testing";
 import { ExternalResolver, Link, LinkSet, PrismaClient } from "@prisma/client";
-
 import { ResolverService } from "./resolver.service";
 
 describe("ResolverService", () => {
   let resolverService: ResolverService;
   let prismaService: PrismaClient;
 
+  const mockPrismaService = {
+    linkSet: {
+      findMany: jest.fn(),
+    },
+    externalResolver: {
+      findMany: jest.fn(),
+    },
+    $transaction: jest.fn().mockImplementation((callback) => {
+      return callback(mockPrismaService);
+    }),
+  };
+
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
-      providers: [ResolverService],
+      providers: [
+        ResolverService,
+        {
+          provide: "PRISMA_CLIENT",
+          useValue: mockPrismaService,
+        },
+      ],
     }).compile();
 
     resolverService = moduleRef.get<ResolverService>(ResolverService);
