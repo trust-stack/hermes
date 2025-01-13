@@ -1,13 +1,16 @@
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
+import { PrismaClient } from "@prisma/client";
 import * as request from "supertest";
 import { AppModule } from "../src/app.module";
-import { UpsertExternalResolverDto } from "../src/external-resolver/external-resolver.dto";
-import { PrismaService } from "../src/prisma/prisma.service";
+import {
+  CreateExternalResolverDto,
+  UpdateExternalResolverDto,
+} from "../src/external-resolver/external-resolver.dto";
 
 describe("ExternalResolverController (e2e)", () => {
   let app: INestApplication;
-  let prismaService: PrismaService;
+  let prismaService: PrismaClient;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -15,7 +18,7 @@ describe("ExternalResolverController (e2e)", () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    prismaService = moduleFixture.get<PrismaService>(PrismaService);
+    prismaService = await moduleFixture.resolve<PrismaClient>("PRISMA_CLIENT");
 
     await app.init();
   });
@@ -25,7 +28,7 @@ describe("ExternalResolverController (e2e)", () => {
   });
 
   it("/external-resolvers (POST)", () => {
-    const dto: UpsertExternalResolverDto = {
+    const dto: CreateExternalResolverDto = {
       pattern: `^(N).*`,
       qualifier: "PIC",
       href: "https://nsw-pic.com",
@@ -46,13 +49,25 @@ describe("ExternalResolverController (e2e)", () => {
       });
   });
 
-  it("/external-resolvers (PUT)", () => {
-    const dto: UpsertExternalResolverDto = {
+  it("/external-resolvers (PUT)", async () => {
+    // Arrange: Seed external resolver
+    await prismaService.externalResolver.create({
+      data: {
+        id: "test-id",
+        pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
+        qualifier: "PICC",
+        href: "https://iscc.com",
+      },
+    });
+
+    const dto: UpdateExternalResolverDto = {
+      id: "test-id",
       pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
       qualifier: "PIC",
       href: "https://iscc.com",
     };
 
+    // Act: Update external resolver
     return request(app.getHttpServer())
       .put("/external-resolvers")
       .send(dto)
@@ -84,7 +99,7 @@ describe("ExternalResolverController (e2e)", () => {
    */
   it("should create, get, and resolve an external resolver set.", async () => {
     let id: string;
-    const nswResolver: UpsertExternalResolverDto = {
+    const nswResolver: CreateExternalResolverDto = {
       qualifier: "PIC",
       pattern: `^(N).*`,
       href: "https://nsw-pic.com",
@@ -106,7 +121,7 @@ describe("ExternalResolverController (e2e)", () => {
         );
       });
 
-    const saResolver: UpsertExternalResolverDto = {
+    const saResolver: CreateExternalResolverDto = {
       qualifier: "PIC",
       pattern: `^(S).*`,
       href: "https://sa-pic.com",

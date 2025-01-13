@@ -3,19 +3,24 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Post,
   Put,
   Query,
 } from "@nestjs/common";
 import { ApiOperation } from "@nestjs/swagger";
-import { PaginationDto } from "src/shared/dto";
-import { UpsertExternalResolverDto } from "./external-resolver.dto";
+import { PaginationDto } from "../shared/dto";
+import {
+  CreateExternalResolverDto,
+  UpdateExternalResolverDto,
+} from "./external-resolver.dto";
 import { ExternalResolverService } from "./external-resolver.service";
 
 @Controller("external-resolvers")
-export class ExternalResolveController {
+export class ExternalResolverController {
   constructor(
+    @Inject()
     private readonly externalResolverService: ExternalResolverService,
   ) {}
 
@@ -23,16 +28,16 @@ export class ExternalResolveController {
     operationId: "createExternalResolver",
   })
   @Post()
-  async create(@Body() dto: UpsertExternalResolverDto) {
-    return this.externalResolverService.upsertExternalResolverSet(dto);
+  async create(@Body() dto: CreateExternalResolverDto) {
+    return this.externalResolverService.create(dto);
   }
 
   @ApiOperation({
     operationId: "updateExternalResolver",
   })
   @Put()
-  async update(@Body() dto: UpsertExternalResolverDto) {
-    return this.externalResolverService.upsertExternalResolverSet(dto);
+  async update(@Body() dto: UpdateExternalResolverDto) {
+    return this.externalResolverService.update(dto);
   }
 
   @ApiOperation({

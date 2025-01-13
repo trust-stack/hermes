@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,38 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Linkset {
+model LinkSet {
   id              String    @id @default(uuid())
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   qualifier       String
   identifier      String
   links           Link[]
-  childLinkSets   Linkset[] @relation(name: "ChildParent")
-  parentLinkSet   Linkset?  @relation(name: "ChildParent", fields: [parentLinkSetId], references: [id], onDelete: Cascade)
+  childLinkSets   LinkSet[] @relation(name: "ChildParent")
+  parentLinkSet   LinkSet?  @relation(name: "ChildParent", fields: [parentLinkSetId], references: [id], onDelete: Cascade)
   parentLinkSetId String?
 
   @@unique([qualifier, identifier])
 }
 
 model Link {
-  id           String    @id @default(uuid())
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   relationType String
-  type         LinkType? @default(HREF)
   href         String?
-  object       Object?   @relation(fields: [objectId], references: [id], onDelete: Cascade)
-  objectId     String?
   title        String
   lang         String[]
-  linkset      Linkset   @relation(fields: [linksetId], references: [id], onDelete: Cascade)
-  linksetId    String
-}
-
-enum LinkType {
-  HREF
-  OBJECT
+  linkSet      LinkSet  @relation(fields: [linkSetId], references: [id], onDelete: Cascade)
+  linkSetId    String
 }
 
 model ExternalResolver {
@@ -59,13 +45,4 @@ model ExternalResolver {
   parentExternalResolverId String?
 
   @@unique([qualifier, pattern])
-}
-
-model Object {
-  id        String   @id @default(uuid())
-  name      String
-  mimeType  String
-  size      Int
-  createdAt DateTime @default(now())
-  links     Link[]
 }

@@ -8,15 +8,7 @@ import {
   ValidateNested,
 } from "class-validator";
 
-export class UpsertExternalResolverDto {
-  @ApiProperty({
-    required: false,
-    description:
-      "The ID of the External Resolver. This causes an UPDATE, not a CREATE.",
-  })
-  @IsString()
-  id?: string;
-
+export class CreateExternalResolverDto {
   @ApiProperty({
     required: true,
     description: "The href of the External Resolver.",
@@ -45,8 +37,17 @@ export class UpsertExternalResolverDto {
   @IsArray()
   @Length(1)
   @ValidateNested({ each: true })
-  @Type(() => UpsertExternalResolverDto)
-  childExternalResolvers?: UpsertExternalResolverDto[];
+  @Type(() => CreateExternalResolverDto)
+  childExternalResolvers?: CreateExternalResolverDto[];
+}
+
+export class UpdateExternalResolverDto extends CreateExternalResolverDto {
+  @ApiProperty({
+    required: false,
+    description: "The ID of the External Resolver.",
+  })
+  @IsString()
+  id: string;
 }
 
 export class ExternalResolverDto {

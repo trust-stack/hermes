@@ -1,13 +1,17 @@
 import { INestApplication } from "@nestjs/common";
 import { Test, TestingModule } from "@nestjs/testing";
+import { PrismaClient } from "@prisma/client";
 import * as request from "supertest";
 import { AppModule } from "../src/app.module";
-import { LinkSetDto, UpsertLinkSetDto } from "../src/link-set/link-set.dto";
-import { PrismaService } from "../src/prisma/prisma.service";
+import {
+  CreateLinkSetDto,
+  LinkSetDto,
+  UpdateLinkSetDto,
+} from "../src/link-set/link-set.dto";
 
 describe("LinkSet (e2e)", () => {
   let app: INestApplication;
-  let prismaService: PrismaService;
+  let prismaService: PrismaClient;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -15,13 +19,13 @@ describe("LinkSet (e2e)", () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    prismaService = moduleFixture.get<PrismaService>(PrismaService);
+    prismaService = await moduleFixture.resolve<PrismaClient>("PRISMA_CLIENT");
 
     await app.init();
   });
 
   beforeEach(async () => {
-    await prismaService.linkset.deleteMany();
+    await prismaService.linkSet.deleteMany();
   });
 
   /**
@@ -32,7 +36,7 @@ describe("LinkSet (e2e)", () => {
    * 3. Verify the link set return
    */
   it("/link-sets (POST)", async () => {
-    const dto: UpsertLinkSetDto = {
+    const dto: CreateLinkSetDto = {
       identifier: "09524000059109",
       qualifier: "01",
       links: [
@@ -41,7 +45,6 @@ describe("LinkSet (e2e)", () => {
           href: "https://example.com",
           title: "Product Description",
           lang: ["en"],
-          type: "HREF",
         },
       ],
     };
@@ -99,7 +102,7 @@ describe("LinkSet (e2e)", () => {
   it("/link-sets/:id (GET)", async () => {
     let dtoResponse: LinkSetDto;
 
-    const dto: UpsertLinkSetDto = {
+    const dto: CreateLinkSetDto = {
       identifier: "09524000059109",
       qualifier: "01",
       links: [
@@ -108,7 +111,6 @@ describe("LinkSet (e2e)", () => {
           href: "https://example.com",
           title: "Product Description",
           lang: ["en"],
-          type: "HREF",
         },
       ],
     };
@@ -169,7 +171,7 @@ describe("LinkSet (e2e)", () => {
       Array(10)
         .fill(null)
         .map((_, index) =>
-          prismaService.linkset.create({
+          prismaService.linkSet.create({
             data: {
               identifier: `09524000059109${index}`,
               qualifier: "01",
@@ -181,7 +183,6 @@ describe("LinkSet (e2e)", () => {
                       href: `https://example.com/${index}`,
                       title: `Product ${index} Description`,
                       lang: ["en"],
-                      type: "HREF",
                     },
                   ],
                 },
@@ -216,7 +217,7 @@ describe("LinkSet (e2e)", () => {
   it("/link-sets (DELETE)", async () => {
     let responseDto: LinkSetDto;
 
-    const dto: UpsertLinkSetDto = {
+    const dto: UpdateLinkSetDto = {
       identifier: "09524000059109",
       qualifier: "01",
       links: [
