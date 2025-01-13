@@ -1,17 +1,24 @@
-import { Injectable } from "@nestjs/common";
-import { ExternalResolver, Link, Prisma } from "@prisma/client";
+import { Inject, Injectable } from "@nestjs/common";
+import { ExternalResolver, Link, Prisma, PrismaClient } from "@prisma/client";
 import { mapValues } from "lodash";
-import { ObjectService } from "../object/object.service";
-import { PrismaService } from "../prisma/prisma.service";
 import { LinkDto, ResolvedLinkSetDto } from "./resolver.dto";
 import { parseUrlPath } from "./utils";
 
+export interface ResolverServiceInterface {
+  resolve(
+    path: string,
+    linkType?: string,
+  ): Promise<{ redirectUrl: string } | ResolvedLinkSetDto>;
+  getResolverMetadata(): Promise<{
+    name: string;
+    resolverRoot: string;
+    supportedLinkType: { namespace: string; prefix: string }[];
+  }>;
+}
+
 @Injectable()
-export class ResolverService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly object: ObjectService,
-  ) {}
+export class ResolverService implements ResolverServiceInterface {
+  constructor(@Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient) {}
 
   async resolve(
     path: string,
@@ -30,7 +37,7 @@ export class ResolverService {
       segments[0];
 
     // Construct where clause
-    const linksetWhere: Prisma.LinksetWhereInput = {
+    const linkSetWhere: Prisma.LinkSetWhereInput = {
       OR: [{ qualifier: primaryQualifier, identifier: primaryIdentifier }],
     };
 
@@ -42,7 +49,7 @@ export class ResolverService {
     for (let i = 1; i < segments.length; i++) {
       const { qualifier, identifier } = segments[i];
 
-      linksetWhere.OR.push({
+      linkSetWhere.OR.push({
         qualifier,
         identifier,
         parentLinkSet: {
@@ -61,12 +68,12 @@ export class ResolverService {
     }
 
     // TODO: This can be simplified, but
-    // unsure how to mock prisma.$transaction([prisma.linkset.findMany, prisma.externalResolver.findMany])
+    // unsure how to mock prisma.$transaction([prisma.linkSet.findMany, prisma.externalResolver.findMany])
     const [linkSets, externalResolvers] = await this.prisma.$transaction(
       (tx) => {
         return Promise.all([
-          tx.linkset.findMany({
-            where: linksetWhere,
+          tx.linkSet.findMany({
+            where: linkSetWhere,
             include: {
               links: true,
             },
@@ -167,12 +174,6 @@ export class ResolverService {
 
     for (const linkSet of sortedLinkSets) {
       for (const link of linkSet.links) {
-        const href =
-          link.type == "HREF"
-            ? link.href
-            : await this.object.generateGetPresignedUrl(link.objectId);
-        link.href = href;
-
         if (!flattenedLinks[link.relationType])
           flattenedLinks[link.relationType] = [];
         flattenedLinks[link.relationType].push(link);

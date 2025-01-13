@@ -1,16 +1,16 @@
-import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
-import { PaginationDto } from "src/shared/dto";
+import { Inject, Injectable, Scope } from "@nestjs/common";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { v4 as uuid } from "uuid";
-import { PrismaService } from "../prisma/prisma.service";
+import { PaginationDto } from "../shared/dto";
 import {
+  CreateExternalResolverDto,
   ExternalResolverDto,
-  UpsertExternalResolverDto,
+  UpdateExternalResolverDto,
 } from "./external-resolver.dto";
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class ExternalResolverService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient) {}
 
   async get(id: string): Promise<ExternalResolverDto> {
     return this.prisma.externalResolver
@@ -38,60 +38,58 @@ export class ExternalResolverService {
       .then((models) => models?.map(toDto));
   }
 
-  async upsertExternalResolverSet(dto: UpsertExternalResolverDto) {
-    return this.prisma.$transaction(async (tx) => {
-      const id = dto.id || uuid();
+  async update(id: string, dto: UpdateExternalResolverDto) {
+    // Delete resolver, cascade delete children
+    await this.prisma.externalResolver.delete({
+      where: { id: id },
+    });
 
-      // Delete resolver, cascade delete children
-      if (dto.id) {
-        await tx.externalResolver.delete({
-          where: {
-            id: dto.id,
-          },
-        });
-      }
+    // Recreate
+    return await this.create(dto);
+  }
 
-      // Create primary resolver
-      await tx.externalResolver.create({
+  async create(dto: CreateExternalResolverDto) {
+    const id = uuid();
+
+    // Create primary resolver
+    return await this.prisma.externalResolver.create({
+      data: {
+        qualifier: dto.qualifier,
+        pattern: dto.pattern,
+        href: dto.href,
+      },
+    });
+
+    async function createChildResolver(dto: CreateExternalResolverDto) {
+      await this.prisma.externalResolver.create({
         data: {
-          id,
+          parentExternalResolverId: id,
           qualifier: dto.qualifier,
           pattern: dto.pattern,
           href: dto.href,
         },
       });
 
-      async function createChildResolver(dto: UpsertExternalResolverDto) {
-        await tx.externalResolver.create({
-          data: {
-            parentExternalResolverId: id,
-            qualifier: dto.qualifier,
-            pattern: dto.pattern,
-            href: dto.href,
-          },
-        });
+      if (!dto?.childExternalResolvers) return;
 
-        if (!dto?.childExternalResolvers) return;
-
-        for (const child of dto.childExternalResolvers) {
-          await createChildResolver(child);
-        }
+      for (const child of dto.childExternalResolvers) {
+        await createChildResolver(child);
       }
+    }
 
-      // Create child resolvers
-      for (const child of dto.childExternalResolvers || []) {
-        createChildResolver(child);
-      }
+    // Create child resolvers
+    for (const child of dto.childExternalResolvers || []) {
+      createChildResolver(child);
+    }
 
-      return tx.externalResolver
-        .findUnique({
-          where: {
-            id,
-          },
-          include: Include,
-        })
-        .then(toDto);
-    });
+    return this.prisma.externalResolver
+      .findUnique({
+        where: {
+          id,
+        },
+        include: Include,
+      })
+      .then(toDto);
   }
 
   async delete(id: string): Promise<string> {

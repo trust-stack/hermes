@@ -1,10 +1,8 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { LinkType } from "@prisma/client";
 import { Type } from "class-transformer";
 import {
   IsArray,
   IsDate,
-  IsEnum,
   IsString,
   Length,
   ValidateNested,
@@ -17,9 +15,6 @@ export class UpsertLinkDto {
   })
   @IsString()
   relationType: string;
-
-  @IsEnum(LinkType)
-  type?: LinkType;
 
   @ApiProperty({
     required: true,
@@ -50,14 +45,7 @@ export class UpsertLinkDto {
   lang?: string[];
 }
 
-export class UpsertLinkSetDto {
-  @ApiProperty({
-    required: false,
-    description: "The ID of the Link Set. This causes an UPDATE, not a CREATE.",
-  })
-  @IsString()
-  id?: string;
-
+export class CreateLinkSetDto {
   @ApiProperty({
     required: true,
     description: "The identifier of the Link Set.",
@@ -84,6 +72,8 @@ export class UpsertLinkSetDto {
   links: UpsertLinkDto[];
 }
 
+export class UpdateLinkSetDto extends CreateLinkSetDto {}
+
 export class LinkDto {
   @ApiProperty({
     required: true,
@@ -91,15 +81,6 @@ export class LinkDto {
   })
   @IsString()
   relationType: string;
-
-  @ApiProperty({
-    required: true,
-    description: "The type of the link.",
-    enum: LinkType,
-    enumName: "LinkType",
-  })
-  @IsEnum(LinkType)
-  type: LinkType;
 
   @ApiProperty({
     required: false,

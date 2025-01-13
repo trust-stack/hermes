@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   NotFoundException,
   Param,
   Post,
@@ -11,12 +12,15 @@ import {
 } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
 import { PaginationDto } from "../shared/dto";
-import { LinkSet, UpsertLinkSetDto } from "./link-set.dto";
+import { CreateLinkSetDto, LinkSet, UpdateLinkSetDto } from "./link-set.dto";
 import { LinkSetService } from "./link-set.service";
 
 @Controller("link-sets")
 export class LinkSetController {
-  constructor(private readonly linkSetService: LinkSetService) {}
+  constructor(
+    @Inject()
+    private readonly linkSetService: LinkSetService,
+  ) {}
 
   @ApiOperation({
     operationId: "createLinkSet",
@@ -28,8 +32,8 @@ export class LinkSetController {
     type: LinkSet,
   })
   @Post()
-  async create(@Body() dto: Omit<UpsertLinkSetDto, "id">) {
-    return this.linkSetService.upsert(dto);
+  async create(@Body() dto: CreateLinkSetDto) {
+    return this.linkSetService.create(dto);
   }
 
   @ApiOperation({
@@ -41,9 +45,9 @@ export class LinkSetController {
     description: "The Link Set was updated.",
     type: LinkSet,
   })
-  @Put()
-  async update(@Body() dto: UpsertLinkSetDto) {
-    return this.linkSetService.upsert(dto);
+  @Put(":id")
+  async update(@Param("id") id: string, @Body() dto: UpdateLinkSetDto) {
+    return this.linkSetService.update(id, dto);
   }
 
   @ApiOperation({ operationId: "getLinkSet", summary: "Get a Link Set by ID" })

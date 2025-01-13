@@ -1,20 +1,15 @@
-import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
-import { ObjectService } from "src/object/object.service";
+import { Inject, Injectable, Scope } from "@nestjs/common";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { v4 as uuid } from "uuid";
-import { PrismaService } from "../prisma/prisma.service";
 import { PaginationDto } from "../shared/dto";
-import { LinkSetDto, UpsertLinkSetDto } from "./link-set.dto";
+import { CreateLinkSetDto, LinkSetDto, UpdateLinkSetDto } from "./link-set.dto";
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class LinkSetService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly object: ObjectService,
-  ) {}
+  constructor(@Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient) {}
 
   async get(id: string): Promise<LinkSetDto> {
-    return this.prisma.linkset
+    return this.prisma.linkSet
       .findUnique({
         where: { id },
         include: { links: true },
@@ -23,7 +18,7 @@ export class LinkSetService {
   }
 
   async getMany(pagination: PaginationDto): Promise<LinkSetDto[]> {
-    return this.prisma.linkset
+    return this.prisma.linkSet
       .findMany({
         include: {
           links: true,
@@ -38,68 +33,45 @@ export class LinkSetService {
   }
 
   async delete(id: string): Promise<string> {
-    await this.prisma.linkset.delete({ where: { id } });
+    await this.prisma.linkSet.delete({ where: { id } });
     return id;
   }
 
-  async upsert(dto: UpsertLinkSetDto) {
-    return this.prisma.$transaction(async (tx) => {
-      const id = dto.id || uuid();
+  async update(id: string, dto: UpdateLinkSetDto) {
+    // Delete existing links
+    await this.prisma.linkSet.deleteMany({ where: { id } });
 
-      if (dto.id) {
-        // Delete existing links for total upsert
-        await tx.link.deleteMany({
-          where: {
-            linksetId: dto.id,
-          },
-        });
-      }
+    // Recreate
+    return await this.create(dto);
+  }
 
-      return tx.linkset
-        .upsert({
-          where: {
-            id,
-          },
-          create: {
-            id,
-            qualifier: dto.qualifier,
-            identifier: dto.identifier,
-            links: {
-              createMany: {
-                data: dto.links.map((link) => ({
-                  relationType: link.relationType,
-                  type: link.type,
-                  href: link.href,
-                  objectId: link.objectKey,
-                  title: link.title,
-                  lang: link.lang,
-                })),
-              },
+  async create(dto: CreateLinkSetDto) {
+    const id = uuid();
+
+    return this.prisma.linkSet
+      .create({
+        data: {
+          id,
+          qualifier: dto.qualifier,
+          identifier: dto.identifier,
+          links: {
+            createMany: {
+              data: dto.links.map((link) => ({
+                relationType: link.relationType,
+                href: link.href,
+                objectId: link.objectKey,
+                title: link.title,
+                lang: link.lang,
+              })),
             },
           },
-          update: {
-            id,
-            qualifier: dto.qualifier,
-            identifier: dto.identifier,
-            links: {
-              createMany: {
-                data: dto.links.map((link) => ({
-                  relationType: link.relationType,
-                  type: link.type,
-                  href: link.href,
-                  objectId: link.objectKey,
-                  title: link.title,
-                  lang: link.lang,
-                })),
-              },
-            },
-          },
-          include: {
-            links: true,
-          },
-        })
-        .then(this.toDto);
-    });
+        },
+
+        include: {
+          links: true,
+        },
+      })
+      .then(this.toDto);
   }
 
   private async toDto(prismaDto: PrismaDTO): Promise<LinkSetDto> {
@@ -115,15 +87,10 @@ export class LinkSetService {
     };
 
     for (const link of prismaDto.links) {
-      // If this is a OBJECT, generate presigned URL
-      const href =
-        link.type == "HREF"
-          ? link.href
-          : await this.object.generateGetPresignedUrl(link.objectId);
+      const href = link.href;
 
       linkSetDto.links.push({
         relationType: link.relationType,
-        type: link.type,
         href,
         title: link.title,
         lang: link.lang,
@@ -136,10 +103,10 @@ export class LinkSetService {
   }
 }
 
-const prismaDto = Prisma.validator<Prisma.LinksetDefaultArgs>()({
+const prismaDto = Prisma.validator<Prisma.LinkSetDefaultArgs>()({
   include: {
     links: true,
   },
 });
 
-type PrismaDTO = Prisma.LinksetGetPayload<typeof prismaDto>;
+type PrismaDTO = Prisma.LinkSetGetPayload<typeof prismaDto>;
