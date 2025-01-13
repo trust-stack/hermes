@@ -17,7 +17,7 @@ import {
 } from "./external-resolver.dto";
 import { ExternalResolverService } from "./external-resolver.service";
 
-@Controller("external-resolvers")
+@Controller("/external-resolvers")
 export class ExternalResolverController {
   constructor(
     @Inject()
@@ -27,7 +27,7 @@ export class ExternalResolverController {
   @ApiOperation({
     operationId: "createExternalResolver",
   })
-  @Post()
+  @Post("")
   async create(@Body() dto: CreateExternalResolverDto) {
     return this.externalResolverService.create(dto);
   }
@@ -35,9 +35,12 @@ export class ExternalResolverController {
   @ApiOperation({
     operationId: "updateExternalResolver",
   })
-  @Put()
-  async update(@Body() dto: UpdateExternalResolverDto) {
-    return this.externalResolverService.update(dto);
+  @Put(":id")
+  async update(
+    @Param("id") id: string,
+    @Body() dto: UpdateExternalResolverDto,
+  ) {
+    return this.externalResolverService.update(id, dto);
   }
 
   @ApiOperation({

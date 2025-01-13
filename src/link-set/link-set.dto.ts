@@ -72,14 +72,7 @@ export class CreateLinkSetDto {
   links: UpsertLinkDto[];
 }
 
-export class UpdateLinkSetDto extends CreateLinkSetDto {
-  @ApiProperty({
-    required: false,
-    description: "The ID of the Link Set. This causes an UPDATE, not a CREATE.",
-  })
-  @IsString()
-  id?: string;
-}
+export class UpdateLinkSetDto extends CreateLinkSetDto {}
 
 export class LinkDto {
   @ApiProperty({

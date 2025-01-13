@@ -41,14 +41,7 @@ export class CreateExternalResolverDto {
   childExternalResolvers?: CreateExternalResolverDto[];
 }
 
-export class UpdateExternalResolverDto extends CreateExternalResolverDto {
-  @ApiProperty({
-    required: false,
-    description: "The ID of the External Resolver.",
-  })
-  @IsString()
-  id: string;
-}
+export class UpdateExternalResolverDto extends CreateExternalResolverDto {}
 
 export class ExternalResolverDto {
   @ApiProperty({

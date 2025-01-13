@@ -29,10 +29,41 @@
           }
         }
       },
+      "get": {
+        "operationId": "getLinkSets",
+        "summary": "Get all paginated Link Sets",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The Link Sets were found and returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LinkSet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/link-sets/{id}": {
       "put": {
         "operationId": "updateLinkSet",
         "summary": "Update an existing Link Set",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -56,28 +87,6 @@
           }
         }
       },
-      "get": {
-        "operationId": "getLinkSets",
-        "summary": "Get all paginated Link Sets",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "The Link Sets were found and returned.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/LinkSet"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/link-sets/{id}": {
       "get": {
         "operationId": "getLinkSet",
         "summary": "Get a Link Set by ID",
@@ -145,10 +154,31 @@
           }
         }
       },
+      "get": {
+        "operationId": "getManyExternalResolvers",
+        "summary": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/external-resolvers/{id}": {
       "put": {
         "operationId": "updateExternalResolver",
         "summary": "",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -165,18 +195,6 @@
           }
         }
       },
-      "get": {
-        "operationId": "getManyExternalResolvers",
-        "summary": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/external-resolvers/{id}": {
       "get": {
         "operationId": "getExternalResolver",
         "summary": "",
@@ -408,10 +426,6 @@
             "items": {
               "$ref": "#/components/schemas/UpsertLinkDto"
             }
-          },
-          "id": {
-            "type": "string",
-            "description": "The ID of the Link Set. This causes an UPDATE, not a CREATE."
           }
         },
         "required": [
@@ -471,10 +485,6 @@
             "items": {
               "type": "string"
             }
-          },
-          "id": {
-            "type": "string",
-            "description": "The ID of the External Resolver."
           }
         },
         "required": [

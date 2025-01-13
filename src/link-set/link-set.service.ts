@@ -1,10 +1,10 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, Scope } from "@nestjs/common";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { v4 as uuid } from "uuid";
 import { PaginationDto } from "../shared/dto";
 import { CreateLinkSetDto, LinkSetDto, UpdateLinkSetDto } from "./link-set.dto";
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class LinkSetService {
   constructor(@Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient) {}
 
@@ -37,9 +37,9 @@ export class LinkSetService {
     return id;
   }
 
-  async update(dto: UpdateLinkSetDto) {
+  async update(id: string, dto: UpdateLinkSetDto) {
     // Delete existing links
-    await this.prisma.linkSet.deleteMany({ where: { id: dto.id } });
+    await this.prisma.linkSet.deleteMany({ where: { id } });
 
     // Recreate
     return await this.create(dto);
@@ -49,11 +49,8 @@ export class LinkSetService {
     const id = uuid();
 
     return this.prisma.linkSet
-      .upsert({
-        where: {
-          id,
-        },
-        create: {
+      .create({
+        data: {
           id,
           qualifier: dto.qualifier,
           identifier: dto.identifier,
@@ -69,22 +66,7 @@ export class LinkSetService {
             },
           },
         },
-        update: {
-          id,
-          qualifier: dto.qualifier,
-          identifier: dto.identifier,
-          links: {
-            createMany: {
-              data: dto.links.map((link) => ({
-                relationType: link.relationType,
-                href: link.href,
-                objectId: link.objectKey,
-                title: link.title,
-                lang: link.lang,
-              })),
-            },
-          },
-        },
+
         include: {
           links: true,
         },

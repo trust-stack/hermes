@@ -49,7 +49,7 @@ describe("ExternalResolverController (e2e)", () => {
       });
   });
 
-  it("/external-resolvers (PUT)", async () => {
+  it("/external-resolvers/:id (PUT)", async () => {
     // Arrange: Seed external resolver
     await prismaService.externalResolver.create({
       data: {
@@ -61,7 +61,6 @@ describe("ExternalResolverController (e2e)", () => {
     });
 
     const dto: UpdateExternalResolverDto = {
-      id: "test-id",
       pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
       qualifier: "PIC",
       href: "https://iscc.com",
@@ -69,7 +68,7 @@ describe("ExternalResolverController (e2e)", () => {
 
     // Act: Update external resolver
     return request(app.getHttpServer())
-      .put("/external-resolvers")
+      .put("/external-resolvers/test-id")
       .send(dto)
       .expect(200)
       .then((response) => {

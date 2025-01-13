@@ -45,9 +45,9 @@ export class LinkSetController {
     description: "The Link Set was updated.",
     type: LinkSet,
   })
-  @Put()
-  async update(@Body() dto: UpdateLinkSetDto) {
-    return this.linkSetService.update(dto);
+  @Put(":id")
+  async update(@Param("id") id: string, @Body() dto: UpdateLinkSetDto) {
+    return this.linkSetService.update(id, dto);
   }
 
   @ApiOperation({ operationId: "getLinkSet", summary: "Get a Link Set by ID" })
