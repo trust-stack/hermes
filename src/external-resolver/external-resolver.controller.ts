@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Inject,
   Param,
   Post,
   Put,
@@ -20,7 +19,6 @@ import { ExternalResolverService } from "./external-resolver.service";
 @Controller("/external-resolvers")
 export class ExternalResolverController {
   constructor(
-    @Inject()
     private readonly externalResolverService: ExternalResolverService,
   ) {}
 
