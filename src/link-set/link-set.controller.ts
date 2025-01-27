@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Inject,
   NotFoundException,
   Param,
   Post,
@@ -17,10 +16,7 @@ import { LinkSetService } from "./link-set.service";
 
 @Controller("link-sets")
 export class LinkSetController {
-  constructor(
-    @Inject(LinkSetService)
-    private readonly linkSetService: LinkSetService,
-  ) {}
+  constructor(private readonly linkSetService: LinkSetService) {}
 
   @ApiOperation({
     operationId: "createLinkSet",
