@@ -18,7 +18,7 @@ import { LinkSetService } from "./link-set.service";
 @Controller("link-sets")
 export class LinkSetController {
   constructor(
-    @Inject()
+    @Inject(LinkSetService)
     private readonly linkSetService: LinkSetService,
   ) {}
 
