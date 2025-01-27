@@ -12,7 +12,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "gen:openapi": "ts-node -r tsconfig-paths/register ./scripts/gen-openapi.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "precommit": "pnpm gen:openapi && git add openapi.json",
+    "precommit": "pnpm gen:openapi",
     "prepare": "husky",
     "prisma:generate": "npx prisma generate",
     "prisma:push": "npx prisma db push",
