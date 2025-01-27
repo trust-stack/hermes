@@ -2,12 +2,12 @@ import { Inject, Injectable } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
 import * as DataLoader from "dataloader";
 
-export interface IHrefBuilderService {
+export interface HrefBuilderService {
   buildHref(id: string): Promise<string>;
 }
 
 @Injectable()
-export class HrefBuilderService implements IHrefBuilderService {
+export class HrefBuilderService implements HrefBuilderService {
   private loader = new DataLoader(async (ids: string[]) => {
     return this.loaderFunction(ids);
   });
