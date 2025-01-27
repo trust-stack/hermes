@@ -2,11 +2,15 @@ import { Inject, Injectable, Scope } from "@nestjs/common";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { v4 as uuid } from "uuid";
 import { PaginationDto } from "../shared/dto";
+import { HrefBuilderService } from "./href-builder.service";
 import { CreateLinkSetDto, LinkSetDto, UpdateLinkSetDto } from "./link-set.dto";
 
 @Injectable({ scope: Scope.REQUEST })
 export class LinkSetService {
-  constructor(@Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient) {}
+  constructor(
+    @Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient,
+    private readonly hrefBuilder: HrefBuilderService,
+  ) {}
 
   async get(id: string): Promise<LinkSetDto> {
     return this.prisma.linkSet
@@ -14,7 +18,7 @@ export class LinkSetService {
         where: { id },
         include: { links: true },
       })
-      .then(this.toDto);
+      .then(this.toDto.bind(this));
   }
 
   async getMany(pagination: PaginationDto): Promise<LinkSetDto[]> {
@@ -29,7 +33,7 @@ export class LinkSetService {
         skip: pagination?.offset ? +pagination?.offset : undefined,
         take: pagination.limit ? +pagination.limit : undefined,
       })
-      .then((models) => Promise.all([...models.map(this.toDto)]));
+      .then((models) => Promise.all([...models.map((dto) => this.toDto(dto))]));
   }
 
   async delete(id: string): Promise<string> {
@@ -71,7 +75,7 @@ export class LinkSetService {
           links: true,
         },
       })
-      .then(this.toDto);
+      .then(this.toDto.bind(this));
   }
 
   private async toDto(prismaDto: PrismaDTO): Promise<LinkSetDto> {
@@ -87,11 +91,10 @@ export class LinkSetService {
     };
 
     for (const link of prismaDto.links) {
-      const href = link.href;
-
       linkSetDto.links.push({
         relationType: link.relationType,
-        href,
+        // Call injectable service to build href.
+        href: await this.hrefBuilder.buildHref(link.id),
         title: link.title,
         lang: link.lang,
         updatedAt: link.updatedAt,
