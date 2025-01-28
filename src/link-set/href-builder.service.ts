@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
-import * as DataLoader from "dataloader";
+import DataLoader from "dataloader";
 
 export interface IHrefBuilderService {
   buildHref(id: string): Promise<string>;
