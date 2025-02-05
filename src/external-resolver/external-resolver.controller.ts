@@ -8,7 +8,7 @@ import {
   Put,
   Query,
 } from "@nestjs/common";
-import { ApiOperation } from "@nestjs/swagger";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 import { PaginationDto } from "../shared/dto";
 import {
   CreateExternalResolverDto,
@@ -17,6 +17,7 @@ import {
 import { ExternalResolverService } from "./external-resolver.service";
 
 @Controller("/external-resolvers")
+@ApiTags("External Resolver")
 export class ExternalResolverController {
   constructor(
     private readonly externalResolverService: ExternalResolverService,
@@ -24,6 +25,7 @@ export class ExternalResolverController {
 
   @ApiOperation({
     operationId: "createExternalResolver",
+    summary: "Create External Resolver",
   })
   @Post("")
   async create(@Body() dto: CreateExternalResolverDto) {
@@ -32,6 +34,7 @@ export class ExternalResolverController {
 
   @ApiOperation({
     operationId: "updateExternalResolver",
+    summary: "Update External Resolver",
   })
   @Put(":id")
   async update(
@@ -43,6 +46,7 @@ export class ExternalResolverController {
 
   @ApiOperation({
     operationId: "getExternalResolver",
+    summary: "Get External Resolver",
   })
   @Get(":id")
   async get(@Param("id") id: string) {
@@ -59,6 +63,7 @@ export class ExternalResolverController {
 
   @ApiOperation({
     operationId: "deleteExternalResolver",
+    summary: "Delete External Resolver",
   })
   @Delete(":id")
   async delete(@Param("id") id: string) {
