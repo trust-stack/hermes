@@ -9,18 +9,19 @@ import {
   Put,
   Query,
 } from "@nestjs/common";
-import { ApiOperation, ApiResponse } from "@nestjs/swagger";
+import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { PaginationDto } from "../shared/dto";
 import { CreateLinkSetDto, LinkSet, UpdateLinkSetDto } from "./link-set.dto";
 import { LinkSetService } from "./link-set.service";
 
 @Controller("link-sets")
+@ApiTags("Link Set")
 export class LinkSetController {
   constructor(private readonly linkSetService: LinkSetService) {}
 
   @ApiOperation({
     operationId: "createLinkSet",
-    summary: "Create a new Link Set",
+    summary: "Create Link Set",
   })
   @ApiResponse({
     status: 201,
@@ -34,7 +35,7 @@ export class LinkSetController {
 
   @ApiOperation({
     operationId: "updateLinkSet",
-    summary: "Update an existing Link Set",
+    summary: "Update Link Set",
   })
   @ApiResponse({
     status: 201,
@@ -46,7 +47,7 @@ export class LinkSetController {
     return this.linkSetService.update(id, dto);
   }
 
-  @ApiOperation({ operationId: "getLinkSet", summary: "Get a Link Set by ID" })
+  @ApiOperation({ operationId: "getLinkSet", summary: "Get Link Set" })
   @ApiResponse({
     status: 200,
     description: "The Link Set was found and returned.",
@@ -63,7 +64,7 @@ export class LinkSetController {
 
   @ApiOperation({
     operationId: "getLinkSets",
-    summary: "Get all paginated Link Sets",
+    summary: "Get Link Sets",
   })
   @ApiResponse({
     status: 200,
@@ -77,7 +78,7 @@ export class LinkSetController {
 
   @ApiOperation({
     operationId: "deleteLinkSet",
-    summary: "Delete a Link Set by ID",
+    summary: "Delete Link Set",
   })
   @Delete(":id")
   async remove(@Param("id") id: string) {
