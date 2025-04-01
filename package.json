@@ -5,6 +5,7 @@
   "description": "",
   "license": "UNLICENSED",
   "author": "",
+  "main": "dist/src/extension.js",
   "scripts": {
     "build": "npx prisma generate && nest build",
     "docker:down": "docker compose down",
