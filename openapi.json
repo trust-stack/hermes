@@ -21,7 +21,9 @@
           }
         },
         "summary": "Create External Resolver",
-        "tags": ["External Resolver"]
+        "tags": [
+          "External Resolver"
+        ]
       },
       "get": {
         "operationId": "getManyExternalResolvers",
@@ -32,7 +34,9 @@
           }
         },
         "summary": "",
-        "tags": ["External Resolver"]
+        "tags": [
+          "External Resolver"
+        ]
       }
     },
     "/external-resolvers/{id}": {
@@ -64,7 +68,9 @@
           }
         },
         "summary": "Update External Resolver",
-        "tags": ["External Resolver"]
+        "tags": [
+          "External Resolver"
+        ]
       },
       "get": {
         "operationId": "getExternalResolver",
@@ -84,7 +90,9 @@
           }
         },
         "summary": "Get External Resolver",
-        "tags": ["External Resolver"]
+        "tags": [
+          "External Resolver"
+        ]
       },
       "delete": {
         "operationId": "deleteExternalResolver",
@@ -104,7 +112,9 @@
           }
         },
         "summary": "Delete External Resolver",
-        "tags": ["External Resolver"]
+        "tags": [
+          "External Resolver"
+        ]
       }
     },
     "/link-anchors/mint": {
@@ -118,7 +128,9 @@
           }
         },
         "summary": "Mint a new link anchor",
-        "tags": ["LinkAnchor"]
+        "tags": [
+          "LinkAnchor"
+        ]
       }
     },
     "/link-anchors/mint-many": {
@@ -142,7 +154,9 @@
           }
         },
         "summary": "Mint many link anchors",
-        "tags": ["LinkAnchor"]
+        "tags": [
+          "LinkAnchor"
+        ]
       }
     },
     "/link-anchors/{id}/set": {
@@ -175,7 +189,9 @@
           }
         },
         "summary": "Set the link set for a link anchor",
-        "tags": ["LinkAnchor"]
+        "tags": [
+          "LinkAnchor"
+        ]
       }
     },
     "/link-anchors/{id}": {
@@ -196,7 +212,9 @@
             "description": ""
           }
         },
-        "tags": ["LinkAnchor"]
+        "tags": [
+          "LinkAnchor"
+        ]
       }
     },
     "/link-anchors": {
@@ -210,7 +228,9 @@
           }
         },
         "summary": "Get many link anchors",
-        "tags": ["LinkAnchor"]
+        "tags": [
+          "LinkAnchor"
+        ]
       }
     },
     "/link-sets": {
@@ -240,7 +260,9 @@
           }
         },
         "summary": "Create Link Set",
-        "tags": ["Link Set"]
+        "tags": [
+          "Link Set"
+        ]
       },
       "get": {
         "operationId": "getLinkSets",
@@ -261,7 +283,9 @@
           }
         },
         "summary": "Get Link Sets",
-        "tags": ["Link Set"]
+        "tags": [
+          "Link Set"
+        ]
       }
     },
     "/link-sets/{id}": {
@@ -300,7 +324,9 @@
           }
         },
         "summary": "Update Link Set",
-        "tags": ["Link Set"]
+        "tags": [
+          "Link Set"
+        ]
       },
       "get": {
         "operationId": "getLinkSet",
@@ -327,7 +353,9 @@
           }
         },
         "summary": "Get Link Set",
-        "tags": ["Link Set"]
+        "tags": [
+          "Link Set"
+        ]
       },
       "delete": {
         "operationId": "deleteLinkSet",
@@ -347,7 +375,9 @@
           }
         },
         "summary": "Delete Link Set",
-        "tags": ["Link Set"]
+        "tags": [
+          "Link Set"
+        ]
       }
     },
     "/*": {
@@ -359,7 +389,9 @@
             "description": ""
           }
         },
-        "tags": ["Resolver"]
+        "tags": [
+          "Resolver"
+        ]
       }
     },
     "/.well-known/resolver": {
@@ -371,7 +403,9 @@
             "description": ""
           }
         },
-        "tags": ["Resolver"]
+        "tags": [
+          "Resolver"
+        ]
       }
     }
   },
@@ -408,7 +442,12 @@
             }
           }
         },
-        "required": ["href", "pattern", "qualifier", "childExternalResolvers"]
+        "required": [
+          "href",
+          "pattern",
+          "qualifier",
+          "childExternalResolvers"
+        ]
       },
       "UpdateExternalResolverDto": {
         "type": "object",
@@ -433,7 +472,12 @@
             }
           }
         },
-        "required": ["href", "pattern", "qualifier", "childExternalResolvers"]
+        "required": [
+          "href",
+          "pattern",
+          "qualifier",
+          "childExternalResolvers"
+        ]
       },
       "MintManyRequest": {
         "type": "object",
@@ -443,7 +487,9 @@
             "description": "The number of link anchors to mint"
           }
         },
-        "required": ["quantity"]
+        "required": [
+          "quantity"
+        ]
       },
       "SetLinkAnchor": {
         "type": "object",
@@ -453,7 +499,9 @@
             "description": "The ID of the link set the link anchor belongs to"
           }
         },
-        "required": ["linkSetId"]
+        "required": [
+          "linkSetId"
+        ]
       },
       "UpsertLinkDto": {
         "type": "object",
@@ -482,7 +530,11 @@
             }
           }
         },
-        "required": ["relationType", "href", "title"]
+        "required": [
+          "relationType",
+          "href",
+          "title"
+        ]
       },
       "CreateLinkSetDto": {
         "type": "object",
@@ -503,7 +555,11 @@
             }
           }
         },
-        "required": ["identifier", "qualifier", "links"]
+        "required": [
+          "identifier",
+          "qualifier",
+          "links"
+        ]
       },
       "Link": {
         "type": "object",
@@ -542,7 +598,12 @@
             "description": "The last update date of the Link."
           }
         },
-        "required": ["relationType", "title", "createdAt", "updatedAt"]
+        "required": [
+          "relationType",
+          "title",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "LinkSet": {
         "type": "object",
@@ -577,7 +638,12 @@
             "description": "The last update date of the Link Set."
           }
         },
-        "required": ["qualifier", "links", "createdAt", "updatedAt"]
+        "required": [
+          "qualifier",
+          "links",
+          "createdAt",
+          "updatedAt"
+        ]
       },
       "UpdateLinkSetDto": {
         "type": "object",
@@ -598,7 +664,11 @@
             }
           }
         },
-        "required": ["identifier", "qualifier", "links"]
+        "required": [
+          "identifier",
+          "qualifier",
+          "links"
+        ]
       }
     }
   }

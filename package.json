@@ -27,9 +27,6 @@
     "test:e2e": "vitest --config vitest.e2e.config.ts",
     "test:watch": "vitest --watch"
   },
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
-  },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^4.0.2",
