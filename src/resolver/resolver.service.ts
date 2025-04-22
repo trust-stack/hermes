@@ -1,8 +1,14 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { ExternalResolver, Link, Prisma, PrismaClient } from "@prisma/client";
 import { mapValues } from "lodash";
+import { appConfig, AppConfig } from "src/config";
+import { LinkSet, linkSetToUrl } from "../link-set/utils";
 import { LinkDto, ResolvedLinkSetDto } from "./resolver.dto";
 import { parseUrlPath } from "./utils";
+
+// UUID v4 regex pattern
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export interface ResolverServiceInterface {
   resolve(
@@ -18,16 +24,60 @@ export interface ResolverServiceInterface {
 
 @Injectable()
 export class ResolverService implements ResolverServiceInterface {
-  constructor(@Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient) {}
+  constructor(
+    @Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient,
+    @Inject(appConfig.KEY) private readonly config: AppConfig,
+  ) {}
 
   async resolve(
     path: string,
     linkType?: string,
   ): Promise<{ redirectUrl: string } | ResolvedLinkSetDto> {
-    // Extract segments
+    const potentialUuid = path.replace("/", "");
+
+    // Check if the identifier is a UUID
+    if (UUID_PATTERN.test(potentialUuid)) {
+      // Look up the LinkAnchor
+      const linkAnchor = await this.prisma.linkAnchor.findUnique({
+        where: { id: potentialUuid },
+        include: {
+          linkSet: {
+            include: {
+              links: true,
+              childLinkSets: {
+                include: {
+                  links: true,
+                },
+              },
+            },
+          },
+        },
+      });
+
+      // If we found a LinkAnchor with an associated LinkSet
+      if (linkAnchor?.linkSet) {
+        // Construct a LinkSet structure
+        const linkSetStructure: LinkSet = {
+          qualifier: linkAnchor.linkSet.qualifier,
+          identifier: linkAnchor.linkSet.identifier,
+          childLinkSets: linkAnchor.linkSet.childLinkSets.map((child) => ({
+            qualifier: child.qualifier,
+            identifier: child.identifier,
+            childLinkSets: [],
+          })),
+        };
+
+        // Generate the URL path from the LinkSet
+        const urlPath = linkSetToUrl(linkSetStructure);
+
+        return {
+          redirectUrl: `${urlPath}`,
+        };
+      }
+    }
+
     const segments = parseUrlPath(path);
 
-    // No segments, no link sets
     if (segments.length === 0) {
       return null;
     }
@@ -214,14 +264,9 @@ export class ResolverService implements ResolverServiceInterface {
 
   async getResolverMetadata() {
     return {
-      name: "Hermes Resolver",
-      resolverRoot: "https://hermes.trustprovenance.io/",
-      supportedLinkType: [
-        {
-          namespace: "https://hermes.trustprovenance.io/lrt/",
-          prefix: "ex",
-        },
-      ],
+      name: this.config.resolverName,
+      resolverRoot: this.config.resolverRoot,
+      supportedLinkType: [],
     };
   }
 }

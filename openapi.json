@@ -1,10 +1,221 @@
 {
   "openapi": "3.0.0",
   "paths": {
+    "/external-resolvers": {
+      "post": {
+        "operationId": "createExternalResolver",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateExternalResolverDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Create External Resolver",
+        "tags": ["External Resolver"]
+      },
+      "get": {
+        "operationId": "getManyExternalResolvers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": ["External Resolver"]
+      }
+    },
+    "/external-resolvers/{id}": {
+      "put": {
+        "operationId": "updateExternalResolver",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateExternalResolverDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Update External Resolver",
+        "tags": ["External Resolver"]
+      },
+      "get": {
+        "operationId": "getExternalResolver",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get External Resolver",
+        "tags": ["External Resolver"]
+      },
+      "delete": {
+        "operationId": "deleteExternalResolver",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Delete External Resolver",
+        "tags": ["External Resolver"]
+      }
+    },
+    "/link-anchors/mint": {
+      "post": {
+        "description": "Mint a new link anchor",
+        "operationId": "mintLinkAnchor",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Mint a new link anchor",
+        "tags": ["LinkAnchor"]
+      }
+    },
+    "/link-anchors/mint-many": {
+      "post": {
+        "description": "Mint many link anchors",
+        "operationId": "mintManyLinkAnchors",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MintManyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "Mint many link anchors",
+        "tags": ["LinkAnchor"]
+      }
+    },
+    "/link-anchors/{id}/set": {
+      "post": {
+        "description": "Set the link set for a link anchor",
+        "operationId": "setLinkAnchorLinkSet",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetLinkAnchor"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Set the link set for a link anchor",
+        "tags": ["LinkAnchor"]
+      }
+    },
+    "/link-anchors/{id}": {
+      "get": {
+        "operationId": "LinkAnchorController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": ["LinkAnchor"]
+      }
+    },
+    "/link-anchors": {
+      "get": {
+        "description": "Get many link anchors",
+        "operationId": "getManyLinkAnchors",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get many link anchors",
+        "tags": ["LinkAnchor"]
+      }
+    },
     "/link-sets": {
       "post": {
         "operationId": "createLinkSet",
-        "summary": "Create a new Link Set",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -27,11 +238,12 @@
               }
             }
           }
-        }
+        },
+        "summary": "Create Link Set",
+        "tags": ["Link Set"]
       },
       "get": {
         "operationId": "getLinkSets",
-        "summary": "Get all paginated Link Sets",
         "parameters": [],
         "responses": {
           "200": {
@@ -47,13 +259,14 @@
               }
             }
           }
-        }
+        },
+        "summary": "Get Link Sets",
+        "tags": ["Link Set"]
       }
     },
     "/link-sets/{id}": {
       "put": {
         "operationId": "updateLinkSet",
-        "summary": "Update an existing Link Set",
         "parameters": [
           {
             "name": "id",
@@ -85,11 +298,12 @@
               }
             }
           }
-        }
+        },
+        "summary": "Update Link Set",
+        "tags": ["Link Set"]
       },
       "get": {
         "operationId": "getLinkSet",
-        "summary": "Get a Link Set by ID",
         "parameters": [
           {
             "name": "id",
@@ -111,11 +325,12 @@
               }
             }
           }
-        }
+        },
+        "summary": "Get Link Set",
+        "tags": ["Link Set"]
       },
       "delete": {
         "operationId": "deleteLinkSet",
-        "summary": "Delete a Link Set by ID",
         "parameters": [
           {
             "name": "id",
@@ -129,109 +344,10 @@
         "responses": {
           "200": {
             "description": ""
-          }
-        }
-      }
-    },
-    "/external-resolvers": {
-      "post": {
-        "operationId": "createExternalResolver",
-        "summary": "",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateExternalResolverDto"
-              }
-            }
           }
         },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        }
-      },
-      "get": {
-        "operationId": "getManyExternalResolvers",
-        "summary": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/external-resolvers/{id}": {
-      "put": {
-        "operationId": "updateExternalResolver",
-        "summary": "",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateExternalResolverDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      },
-      "get": {
-        "operationId": "getExternalResolver",
-        "summary": "",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      },
-      "delete": {
-        "operationId": "deleteExternalResolver",
-        "summary": "",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
+        "summary": "Delete Link Set",
+        "tags": ["Link Set"]
       }
     },
     "/*": {
@@ -242,7 +358,8 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": ["Resolver"]
       }
     },
     "/.well-known/resolver": {
@@ -253,13 +370,14 @@
           "200": {
             "description": ""
           }
-        }
+        },
+        "tags": ["Resolver"]
       }
     }
   },
   "info": {
-    "title": "Hermes",
-    "description": "Hermes Link Resolver",
+    "title": "link-resolver",
+    "description": "link-resolver Link Resolver",
     "version": "1.0",
     "contact": {}
   },
@@ -267,6 +385,76 @@
   "servers": [],
   "components": {
     "schemas": {
+      "CreateExternalResolverDto": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string",
+            "description": "The href of the External Resolver."
+          },
+          "pattern": {
+            "type": "string",
+            "description": "The pattern of the External Resolver."
+          },
+          "qualifier": {
+            "type": "string",
+            "description": "The qualifier of the External Resolver."
+          },
+          "childExternalResolvers": {
+            "description": "The creation data of the External Resolver.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["href", "pattern", "qualifier", "childExternalResolvers"]
+      },
+      "UpdateExternalResolverDto": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string",
+            "description": "The href of the External Resolver."
+          },
+          "pattern": {
+            "type": "string",
+            "description": "The pattern of the External Resolver."
+          },
+          "qualifier": {
+            "type": "string",
+            "description": "The qualifier of the External Resolver."
+          },
+          "childExternalResolvers": {
+            "description": "The creation data of the External Resolver.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["href", "pattern", "qualifier", "childExternalResolvers"]
+      },
+      "MintManyRequest": {
+        "type": "object",
+        "properties": {
+          "quantity": {
+            "type": "number",
+            "description": "The number of link anchors to mint"
+          }
+        },
+        "required": ["quantity"]
+      },
+      "SetLinkAnchor": {
+        "type": "object",
+        "properties": {
+          "linkSetId": {
+            "type": "string",
+            "description": "The ID of the link set the link anchor belongs to"
+          }
+        },
+        "required": ["linkSetId"]
+      },
       "UpsertLinkDto": {
         "type": "object",
         "properties": {
@@ -294,11 +482,7 @@
             }
           }
         },
-        "required": [
-          "relationType",
-          "href",
-          "title"
-        ]
+        "required": ["relationType", "href", "title"]
       },
       "CreateLinkSetDto": {
         "type": "object",
@@ -319,11 +503,7 @@
             }
           }
         },
-        "required": [
-          "identifier",
-          "qualifier",
-          "links"
-        ]
+        "required": ["identifier", "qualifier", "links"]
       },
       "Link": {
         "type": "object",
@@ -362,12 +542,7 @@
             "description": "The last update date of the Link."
           }
         },
-        "required": [
-          "relationType",
-          "title",
-          "createdAt",
-          "updatedAt"
-        ]
+        "required": ["relationType", "title", "createdAt", "updatedAt"]
       },
       "LinkSet": {
         "type": "object",
@@ -402,12 +577,7 @@
             "description": "The last update date of the Link Set."
           }
         },
-        "required": [
-          "qualifier",
-          "links",
-          "createdAt",
-          "updatedAt"
-        ]
+        "required": ["qualifier", "links", "createdAt", "updatedAt"]
       },
       "UpdateLinkSetDto": {
         "type": "object",
@@ -428,71 +598,7 @@
             }
           }
         },
-        "required": [
-          "identifier",
-          "qualifier",
-          "links"
-        ]
-      },
-      "CreateExternalResolverDto": {
-        "type": "object",
-        "properties": {
-          "href": {
-            "type": "string",
-            "description": "The href of the External Resolver."
-          },
-          "pattern": {
-            "type": "string",
-            "description": "The pattern of the External Resolver."
-          },
-          "qualifier": {
-            "type": "string",
-            "description": "The qualifier of the External Resolver."
-          },
-          "childExternalResolvers": {
-            "description": "The creation data of the External Resolver.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "href",
-          "pattern",
-          "qualifier",
-          "childExternalResolvers"
-        ]
-      },
-      "UpdateExternalResolverDto": {
-        "type": "object",
-        "properties": {
-          "href": {
-            "type": "string",
-            "description": "The href of the External Resolver."
-          },
-          "pattern": {
-            "type": "string",
-            "description": "The pattern of the External Resolver."
-          },
-          "qualifier": {
-            "type": "string",
-            "description": "The qualifier of the External Resolver."
-          },
-          "childExternalResolvers": {
-            "description": "The creation data of the External Resolver.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "href",
-          "pattern",
-          "qualifier",
-          "childExternalResolvers"
-        ]
+        "required": ["identifier", "qualifier", "links"]
       }
     }
   }

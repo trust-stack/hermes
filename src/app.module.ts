@@ -1,10 +1,18 @@
 import { Module } from "@nestjs/common";
-import { ExternalResolverModule } from "./external-resolver/external-resolver.module";
-import { LinkSetModule } from "./link-set/link-set.module";
-import { ResolverModule } from "./resolver/resolver.module";
+import { ConfigModule } from "./config/config.module";
+import { ExternalResolverModule } from "./external-resolver";
+import { LinkAnchorModule } from "./link-anchor";
+import { LinkSetModule } from "./link-set";
+import { ResolverModule } from "./resolver";
 
 @Module({
-  imports: [LinkSetModule, ExternalResolverModule, ResolverModule],
+  imports: [
+    ConfigModule,
+    ExternalResolverModule,
+    LinkAnchorModule,
+    LinkSetModule,
+    ResolverModule,
+  ],
   controllers: [],
   providers: [],
 })

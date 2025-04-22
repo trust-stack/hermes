@@ -94,13 +94,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t hermes:latest .
+        run: docker build -t link-resolver:latest .
 
       - name: Tag Docker image
-        run: docker tag hermes:latest truststack/hermes:latest
+        run: docker tag link-resolver:latest truststack/link-resolver:latest
 
       - name: Push Docker image
-        run: docker push truststack/hermes:latest
+        run: docker push truststack/link-resolver:latest
 
   # publish-openapi:
   #   runs-on: ubuntu-latest
