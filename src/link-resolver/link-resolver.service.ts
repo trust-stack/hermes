@@ -1,45 +1,33 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { ExternalResolver, Link, Prisma, PrismaClient } from "@prisma/client";
-import { mapValues } from "lodash";
-import { appConfig, AppConfig } from "src/config";
-import { LinkSet, linkSetToUrl } from "../link-set/utils";
-import { LinkDto, ResolvedLinkSetDto } from "./resolver.dto";
-import { parseUrlPath } from "./utils";
+import {Inject, Injectable} from "@nestjs/common";
+import {ExternalResolver, Link, Prisma, PrismaClient} from "@prisma/client";
+import {mapValues} from "lodash";
+import {appConfig, AppConfig} from "src/config";
+import {LinkSet, linkSetToUrl} from "../link-set/utils";
+import {LinkDto, ResolvedLinkSetDto} from "./dtos";
+import {parseUrlPath} from "./utils";
 
 // UUID v4 regex pattern
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-export interface ResolverServiceInterface {
-  resolve(
-    path: string,
-    linkType?: string,
-  ): Promise<{ redirectUrl: string } | ResolvedLinkSetDto>;
-  getResolverMetadata(): Promise<{
-    name: string;
-    resolverRoot: string;
-    supportedLinkType: { namespace: string; prefix: string }[];
-  }>;
-}
-
 @Injectable()
-export class ResolverService implements ResolverServiceInterface {
+export class LinkResolverService {
   constructor(
     @Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient,
-    @Inject(appConfig.KEY) private readonly config: AppConfig,
+    @Inject(appConfig.KEY) private readonly config: AppConfig
   ) {}
 
   async resolve(
     path: string,
-    linkType?: string,
-  ): Promise<{ redirectUrl: string } | ResolvedLinkSetDto> {
+    linkType?: string
+  ): Promise<{redirectUrl: string} | ResolvedLinkSetDto> {
     const potentialUuid = path.replace("/", "");
 
     // Check if the identifier is a UUID
     if (UUID_PATTERN.test(potentialUuid)) {
       // Look up the LinkAnchor
       const linkAnchor = await this.prisma.linkAnchor.findUnique({
-        where: { id: potentialUuid },
+        where: {id: potentialUuid},
         include: {
           linkSet: {
             include: {
@@ -83,21 +71,21 @@ export class ResolverService implements ResolverServiceInterface {
     }
 
     // Extract primary qualifier/identifier pair
-    const { qualifier: primaryQualifier, identifier: primaryIdentifier } =
+    const {qualifier: primaryQualifier, identifier: primaryIdentifier} =
       segments[0];
 
     // Construct where clause
     const linkSetWhere: Prisma.LinkSetWhereInput = {
-      OR: [{ qualifier: primaryQualifier, identifier: primaryIdentifier }],
+      OR: [{qualifier: primaryQualifier, identifier: primaryIdentifier}],
     };
 
     const externalWhere: Prisma.ExternalResolverWhereInput = {
-      OR: [{ qualifier: primaryQualifier }],
+      OR: [{qualifier: primaryQualifier}],
     };
 
     // Starting from the second segment
     for (let i = 1; i < segments.length; i++) {
-      const { qualifier, identifier } = segments[i];
+      const {qualifier, identifier} = segments[i];
 
       linkSetWhere.OR.push({
         qualifier,
@@ -132,7 +120,7 @@ export class ResolverService implements ResolverServiceInterface {
             where: externalWhere,
           }),
         ]);
-      },
+      }
     );
 
     const treeNodes: ResolverTreeNode[] = [];
@@ -150,7 +138,7 @@ export class ResolverService implements ResolverServiceInterface {
     sortedExternalResolvers.forEach((resolver) => {
       const node = new ResolverTreeNode(
         resolver,
-        !resolver.parentExternalResolverId,
+        !resolver.parentExternalResolverId
       );
 
       treeNodes.push(node);
@@ -158,7 +146,7 @@ export class ResolverService implements ResolverServiceInterface {
       // Find parent and add as child
       if (!!resolver.parentExternalResolverId) {
         const parent = treeNodes.find(
-          (node) => node.id == resolver.parentExternalResolverId,
+          (node) => node.id == resolver.parentExternalResolverId
         );
 
         parent.addChild(node);
@@ -177,9 +165,9 @@ export class ResolverService implements ResolverServiceInterface {
     function traverseTree(
       node: ResolverTreeNode,
       nodes: ResolverTreeNode[],
-      depth: number,
+      depth: number
     ) {
-      const { identifier } = segments[depth];
+      const {identifier} = segments[depth];
 
       // If pattern matches, traverse to child
       if (new RegExp(node.resolver.pattern).test(identifier)) {
@@ -209,18 +197,18 @@ export class ResolverService implements ResolverServiceInterface {
     // Sort link sets by depth in requested url path
     const sortedLinkSets = linkSets.sort((a, b) => {
       const indexA = segments.findIndex(
-        (seg) => seg.identifier == a.identifier && seg.qualifier == a.qualifier,
+        (seg) => seg.identifier == a.identifier && seg.qualifier == a.qualifier
       );
 
       const indexB = segments.findIndex(
-        (seg) => seg.identifier == b.identifier && seg.qualifier == b.qualifier,
+        (seg) => seg.identifier == b.identifier && seg.qualifier == b.qualifier
       );
 
       return indexA - indexB;
     });
 
     // Flatten link sets returned
-    const flattenedLinks: { [relationType: string]: Link[] } = {};
+    const flattenedLinks: {[relationType: string]: Link[]} = {};
 
     for (const linkSet of sortedLinkSets) {
       for (const link of linkSet.links) {
@@ -245,8 +233,8 @@ export class ResolverService implements ResolverServiceInterface {
             href: l.href,
             title: l.title,
             lang: l.lang,
-          }) as LinkDto,
-      ),
+          }) as LinkDto
+      )
     );
 
     return {
@@ -280,7 +268,7 @@ class ResolverTreeNode {
 
   constructor(
     public resolver: ExternalResolver,
-    public root?: boolean,
+    public root?: boolean
   ) {}
 
   addChild(node: ResolverTreeNode) {

@@ -1,22 +1,22 @@
-import { Inject, Injectable, Scope } from "@nestjs/common";
-import { Prisma, PrismaClient } from "@prisma/client";
-import { v4 as uuid } from "uuid";
-import { PaginationDto } from "../shared/dto";
-import { HrefBuilderService } from "./href-builder.service";
-import { CreateLinkSetDto, LinkSetDto, UpdateLinkSetDto } from "./link-set.dto";
+import {Inject, Injectable, Scope} from "@nestjs/common";
+import {Prisma, PrismaClient} from "@prisma/client";
+import {v4 as uuid} from "uuid";
+import {PaginationDto} from "../shared/dto";
+import {CreateLinkSetDto, LinkSetDto, UpdateLinkSetDto} from "./dtos";
+import {HrefBuilderService} from "./href-builder.service";
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable({scope: Scope.REQUEST})
 export class LinkSetService {
   constructor(
     @Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient,
-    private readonly hrefBuilder: HrefBuilderService,
+    private readonly hrefBuilder: HrefBuilderService
   ) {}
 
   async get(id: string): Promise<LinkSetDto> {
     return this.prisma.linkSet
       .findUnique({
-        where: { id },
-        include: { links: true },
+        where: {id},
+        include: {links: true},
       })
       .then(this.toDto.bind(this));
   }
@@ -37,13 +37,13 @@ export class LinkSetService {
   }
 
   async delete(id: string): Promise<string> {
-    await this.prisma.linkSet.delete({ where: { id } });
+    await this.prisma.linkSet.delete({where: {id}});
     return id;
   }
 
   async update(id: string, dto: UpdateLinkSetDto) {
     // Delete existing links
-    await this.prisma.linkSet.deleteMany({ where: { id } });
+    await this.prisma.linkSet.deleteMany({where: {id}});
 
     // Recreate
     return await this.create(dto);

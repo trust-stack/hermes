@@ -1,10 +1,10 @@
-import { faker } from "@faker-js/faker";
-import { Test } from "@nestjs/testing";
-import { ExternalResolver, Link, LinkSet, PrismaClient } from "@prisma/client";
-import { ResolverService } from "./resolver.service";
+import {faker} from "@faker-js/faker";
+import {Test} from "@nestjs/testing";
+import {ExternalResolver, Link, LinkSet, PrismaClient} from "@prisma/client";
+import {LinkResolverService} from "./link-resolver.service";
 
-describe("ResolverService", () => {
-  let resolverService: ResolverService;
+describe("LinkResolverService", () => {
+  let resolverService: LinkResolverService;
   let prismaService: PrismaClient;
 
   const mockPrismaService = {
@@ -22,7 +22,7 @@ describe("ResolverService", () => {
   beforeEach(async () => {
     const moduleRef = await Test.createTestingModule({
       providers: [
-        ResolverService,
+        LinkResolverService,
         {
           provide: "PRISMA_CLIENT",
           useValue: mockPrismaService,
@@ -30,7 +30,7 @@ describe("ResolverService", () => {
       ],
     }).compile();
 
-    resolverService = moduleRef.get<ResolverService>(ResolverService);
+    resolverService = moduleRef.get<LinkResolverService>(LinkResolverService);
     prismaService = moduleRef.get<PrismaClient>("PRISMA_CLIENT");
   });
 
@@ -150,7 +150,7 @@ describe("ResolverService", () => {
         ]);
 
         expect(
-          await resolverService.resolve("/01/09524000059109/21/1234"),
+          await resolverService.resolve("/01/09524000059109/21/1234")
         ).toEqual({
           linkSet: [
             {
@@ -235,7 +235,7 @@ describe("ResolverService", () => {
         expect(await resolverService.resolve("/PIC/NSW123456/FOO/BAR")).toEqual(
           {
             redirectUrl: "https://secondary.com/PIC/NSW123456/FOO/BAR",
-          },
+          }
         );
       });
     });

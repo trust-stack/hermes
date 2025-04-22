@@ -1,12 +1,12 @@
-import { INestApplication } from "@nestjs/common";
-import { Test, TestingModule } from "@nestjs/testing";
-import { PrismaClient } from "@prisma/client";
+import {INestApplication} from "@nestjs/common";
+import {Test, TestingModule} from "@nestjs/testing";
+import {PrismaClient} from "@prisma/client";
 import request from "supertest";
-import { AppModule } from "../src/app.module";
+import {AppModule} from "../src/app.module";
 import {
   CreateExternalResolverDto,
   UpdateExternalResolverDto,
-} from "../src/external-resolver/external-resolver.dto";
+} from "../src/external-resolver/dtos/external-resolver.dto";
 
 describe("ExternalResolverController (e2e)", () => {
   let app: INestApplication;
@@ -44,7 +44,7 @@ describe("ExternalResolverController (e2e)", () => {
             pattern: `^(N).*`,
             qualifier: "PIC",
             href: "https://nsw-pic.com",
-          }),
+          })
         );
       });
   });
@@ -77,7 +77,7 @@ describe("ExternalResolverController (e2e)", () => {
             pattern: `^(N|3|S|Q|W|NA75|M|T).*`,
             qualifier: "PIC",
             href: "https://iscc.com",
-          }),
+          })
         );
       });
   });
@@ -116,7 +116,7 @@ describe("ExternalResolverController (e2e)", () => {
             qualifier: "PIC",
             pattern: `^(N).*`,
             href: "https://nsw-pic.com",
-          }),
+          })
         );
       });
 
@@ -138,7 +138,7 @@ describe("ExternalResolverController (e2e)", () => {
             qualifier: "PIC",
             pattern: `^(S).*`,
             href: "https://sa-pic.com",
-          }),
+          })
         );
       });
 

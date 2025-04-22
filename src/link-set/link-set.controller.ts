@@ -9,10 +9,10 @@ import {
   Put,
   Query,
 } from "@nestjs/common";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { PaginationDto } from "../shared/dto";
-import { CreateLinkSetDto, LinkSet, UpdateLinkSetDto } from "./link-set.dto";
-import { LinkSetService } from "./link-set.service";
+import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {PaginationDto} from "../shared/dto";
+import {CreateLinkSetDto, LinkSetDto, UpdateLinkSetDto} from "./dtos";
+import {LinkSetService} from "./link-set.service";
 
 @Controller("link-sets")
 @ApiTags("Link Set")
@@ -26,7 +26,7 @@ export class LinkSetController {
   @ApiResponse({
     status: 201,
     description: "The Link Set was created.",
-    type: LinkSet,
+    type: LinkSetDto,
   })
   @Post()
   async create(@Body() dto: CreateLinkSetDto) {
@@ -40,18 +40,18 @@ export class LinkSetController {
   @ApiResponse({
     status: 201,
     description: "The Link Set was updated.",
-    type: LinkSet,
+    type: LinkSetDto,
   })
   @Put(":id")
   async update(@Param("id") id: string, @Body() dto: UpdateLinkSetDto) {
     return this.linkSetService.update(id, dto);
   }
 
-  @ApiOperation({ operationId: "getLinkSet", summary: "Get Link Set" })
+  @ApiOperation({operationId: "getLinkSet", summary: "Get Link Set"})
   @ApiResponse({
     status: 200,
     description: "The Link Set was found and returned.",
-    type: LinkSet,
+    type: LinkSetDto,
   })
   @Get(":id")
   async get(@Param("id") id: string) {
@@ -69,7 +69,7 @@ export class LinkSetController {
   @ApiResponse({
     status: 200,
     description: "The Link Sets were found and returned.",
-    type: [LinkSet],
+    type: [LinkSetDto],
   })
   @Get()
   async getMany(@Query() paginationDto: PaginationDto) {
