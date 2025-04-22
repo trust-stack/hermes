@@ -4,5 +4,7 @@ node_modules
 dist/
 reports/
 
+.turbo
+
 postman_collection.json
 *.tgz
