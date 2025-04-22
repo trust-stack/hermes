@@ -8,7 +8,7 @@ import {
   Query,
 } from "@nestjs/common";
 import { ApiOperation } from "@nestjs/swagger";
-import { PaginationDto } from "src/shared/dto";
+import { PaginationDto } from "../shared/dto";
 import { LinkAnchorDto, MintManyRequestDto, SetLinkAnchorDto } from "./dtos";
 import { LinkAnchorService } from "./link-anchor.service";
 

@@ -9,8 +9,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle("Hermes Link Resolver")
-    .setDescription("Hermes API documentation")
+    .setTitle("link-resolver Link Resolver")
+    .setDescription("link-resolver API documentation")
     .setVersion("1.0")
     .addTag("link-resolver")
     .build();

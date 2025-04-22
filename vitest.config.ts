@@ -12,8 +12,12 @@ export default defineConfig({
         __dirname,
         "../../packages/prisma/src",
       ),
-      "@truststack/hermes": path.resolve(__dirname, "../hermes/src/extension"),
+      "truststack-link-resolver": path.resolve(
+        __dirname,
+        "../link-resolver/src/extension",
+      ),
     },
+
     reporters: [
       "default",
       [

@@ -1,7 +1,7 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { LinkAnchor, PrismaClient } from "@prisma/client";
-import { uuid } from "src/shared";
-import { PaginationDto } from "src/shared/dto";
+import { uuid } from "../shared";
+import { PaginationDto } from "../shared/dto";
 import { LinkAnchorDto } from "./dtos";
 
 @Injectable()
@@ -56,7 +56,7 @@ export class LinkAnchorService {
     });
 
     if (!existingAnchor) {
-      throw new Error(`LinkAnchor with id ${id} not found`);
+      throw new NotFoundException(`LinkAnchor with id ${id} not found`);
     }
 
     // Then verify that the LinkSet exists
@@ -65,7 +65,7 @@ export class LinkAnchorService {
     });
 
     if (!linkSet) {
-      throw new Error(`LinkSet with id ${linkSetId} not found`);
+      throw new NotFoundException(`LinkSet with id ${linkSetId} not found`);
     }
 
     // Update the LinkAnchor
@@ -94,6 +94,10 @@ export class LinkAnchorService {
       where: { id },
     });
 
+    if (!linkAnchor) {
+      throw new NotFoundException(`LinkAnchor with id ${id} not found`);
+    }
+
     return this.toLinkAnchorDto(linkAnchor);
   }
 
@@ -113,6 +117,10 @@ export class LinkAnchorService {
   }
 
   private toLinkAnchorDto(linkAnchor: LinkAnchor): LinkAnchorDto {
+    if (!linkAnchor) {
+      return null;
+    }
+
     return {
       id: linkAnchor.id,
       createdAt: linkAnchor.createdAt,

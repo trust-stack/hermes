@@ -13,6 +13,10 @@ export default defineConfig({
         replacement: path.resolve(__dirname, "./src"),
       },
     ],
+    env: {
+      DATABASE_URL:
+        "postgresql://hermes:password@localhost:5432/hermes?schema=public",
+    },
     globalSetup: "./test/test-setup.ts",
     reporters: [
       "default",

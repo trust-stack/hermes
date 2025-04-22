@@ -7,8 +7,8 @@ import { AppModule } from "../src/app.module";
 async function generateOpenapi() {
   const app = await NestFactory.create(AppModule);
   const options = new DocumentBuilder()
-    .setTitle("Hermes")
-    .setDescription("Hermes Link Resolver")
+    .setTitle("link-resolver")
+    .setDescription("link-resolver Link Resolver")
     .setVersion("1.0")
     .build();
   const document = SwaggerModule.createDocument(app, options);
