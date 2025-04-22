@@ -242,7 +242,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateLinkSetDto"
+                "$ref": "#/components/schemas/CreateLinkSet"
               }
             }
           }
@@ -306,7 +306,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateLinkSetDto"
+                "$ref": "#/components/schemas/UpdateLinkSet"
               }
             }
           }
@@ -503,7 +503,7 @@
           "linkSetId"
         ]
       },
-      "UpsertLinkDto": {
+      "UpsertLink": {
         "type": "object",
         "properties": {
           "relationType": {
@@ -536,7 +536,7 @@
           "title"
         ]
       },
-      "CreateLinkSetDto": {
+      "CreateLinkSet": {
         "type": "object",
         "properties": {
           "identifier": {
@@ -551,7 +551,7 @@
             "description": "The links of the Link Set.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UpsertLinkDto"
+              "$ref": "#/components/schemas/UpsertLink"
             }
           }
         },
@@ -645,7 +645,7 @@
           "updatedAt"
         ]
       },
-      "UpdateLinkSetDto": {
+      "UpdateLinkSet": {
         "type": "object",
         "properties": {
           "identifier": {
@@ -660,7 +660,7 @@
             "description": "The links of the Link Set.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UpsertLinkDto"
+              "$ref": "#/components/schemas/UpsertLink"
             }
           }
         },
