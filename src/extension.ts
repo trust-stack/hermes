@@ -7,3 +7,5 @@ export {
 export { LinkSetController } from "./link-set/link-set.controller";
 export { LinkSetDto } from "./link-set/link-set.dto";
 export { LinkSetService } from "./link-set/link-set.service";
+
+export * from "./link-set/utils";

@@ -8,15 +8,16 @@ datasource db {
 }
 
 model LinkSet {
-  id              String    @id @default(uuid())
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id              String       @id @default(uuid())
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
   qualifier       String
   identifier      String
   links           Link[]
-  childLinkSets   LinkSet[] @relation(name: "ChildParent")
-  parentLinkSet   LinkSet?  @relation(name: "ChildParent", fields: [parentLinkSetId], references: [id], onDelete: Cascade)
+  childLinkSets   LinkSet[]    @relation(name: "ChildParent")
+  parentLinkSet   LinkSet?     @relation(name: "ChildParent", fields: [parentLinkSetId], references: [id], onDelete: Cascade)
   parentLinkSetId String?
+  linkAnchors     LinkAnchor[]
 
   @@unique([qualifier, identifier])
 }
@@ -45,4 +46,12 @@ model ExternalResolver {
   parentExternalResolverId String?
 
   @@unique([qualifier, pattern])
+}
+
+model LinkAnchor {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  linkSet   LinkSet? @relation(fields: [linkSetId], references: [id])
+  linkSetId String?
 }
