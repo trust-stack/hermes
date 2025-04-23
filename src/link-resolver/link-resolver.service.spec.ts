@@ -1,6 +1,8 @@
 import {faker} from "@faker-js/faker";
 import {Test} from "@nestjs/testing";
 import {ExternalResolver, Link, LinkSet, PrismaClient} from "@prisma/client";
+import {vi} from "vitest";
+import {appConfig} from "../../src/config";
 import {LinkResolverService} from "./link-resolver.service";
 
 describe("LinkResolverService", () => {
@@ -9,12 +11,12 @@ describe("LinkResolverService", () => {
 
   const mockPrismaService = {
     linkSet: {
-      findMany: jest.fn(),
+      findMany: vi.fn(),
     },
     externalResolver: {
-      findMany: jest.fn(),
+      findMany: vi.fn(),
     },
-    $transaction: jest.fn().mockImplementation((callback) => {
+    $transaction: vi.fn().mockImplementation((callback) => {
       return callback(mockPrismaService);
     }),
   };
@@ -27,6 +29,10 @@ describe("LinkResolverService", () => {
           provide: "PRISMA_CLIENT",
           useValue: mockPrismaService,
         },
+        {
+          provide: appConfig.KEY,
+          useValue: {},
+        },
       ],
     }).compile();
 
@@ -37,9 +43,9 @@ describe("LinkResolverService", () => {
   describe("resolve", () => {
     describe("link sets", () => {
       beforeEach(() => {
-        jest
-          .spyOn(prismaService.externalResolver, "findMany")
-          .mockResolvedValue([]);
+        vi.spyOn(prismaService.externalResolver, "findMany").mockResolvedValue(
+          []
+        );
       });
 
       it("can resolve a single primary identifier and qualifier pair.", async () => {
@@ -66,9 +72,9 @@ describe("LinkResolverService", () => {
           ],
         };
 
-        jest
-          .spyOn(prismaService.linkSet, "findMany")
-          .mockResolvedValue([linkSet as LinkSet]);
+        vi.spyOn(prismaService.linkSet, "findMany").mockResolvedValue([
+          linkSet as LinkSet,
+        ]);
 
         expect(await resolverService.resolve("/01/09524000059109")).toEqual({
           linkSet: [
@@ -143,7 +149,7 @@ describe("LinkResolverService", () => {
           ],
         };
 
-        jest.spyOn(prismaService.linkSet, "findMany").mockResolvedValue([
+        vi.spyOn(prismaService.linkSet, "findMany").mockResolvedValue([
           // NOTE random order returned
           secondaryLinkSet as LinkSet,
           primaryLinkSet as LinkSet,
@@ -184,7 +190,7 @@ describe("LinkResolverService", () => {
 
     describe("external resolvers.", () => {
       beforeEach(() => {
-        jest.spyOn(prismaService.linkSet, "findMany").mockResolvedValue([]);
+        vi.spyOn(prismaService.linkSet, "findMany").mockResolvedValue([]);
       });
 
       it("can pattern match a primary qualifier and identifier.", async () => {
@@ -198,9 +204,9 @@ describe("LinkResolverService", () => {
           parentExternalResolverId: undefined,
         };
 
-        jest
-          .spyOn(prismaService.externalResolver, "findMany")
-          .mockResolvedValue([externalResolver]);
+        vi.spyOn(prismaService.externalResolver, "findMany").mockResolvedValue([
+          externalResolver,
+        ]);
 
         expect(await resolverService.resolve("/PIC/NSW123456")).toEqual({
           redirectUrl: "https://primary.com/PIC/NSW123456",
@@ -228,9 +234,10 @@ describe("LinkResolverService", () => {
           parentExternalResolverId: "primary-resolver",
         };
 
-        jest
-          .spyOn(prismaService.externalResolver, "findMany")
-          .mockResolvedValue([secondaryResolver, primaryResolver]);
+        vi.spyOn(prismaService.externalResolver, "findMany").mockResolvedValue([
+          secondaryResolver,
+          primaryResolver,
+        ]);
 
         expect(await resolverService.resolve("/PIC/NSW123456/FOO/BAR")).toEqual(
           {

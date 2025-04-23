@@ -1,12 +1,6 @@
 import {ApiProperty, ApiSchema} from "@nestjs/swagger";
 import {Type} from "class-transformer";
-import {
-  IsArray,
-  IsDate,
-  IsString,
-  Length,
-  ValidateNested,
-} from "class-validator";
+import {IsArray, IsDate, IsString, ValidateNested} from "class-validator";
 import {LinkDto} from "./link.dto";
 
 @ApiSchema({name: "LinkSet"})
@@ -38,7 +32,6 @@ export class LinkSetDto {
     type: () => [LinkDto],
   })
   @IsArray()
-  @Length(1)
   @ValidateNested({each: true})
   @Type(() => LinkDto)
   links: LinkDto[];

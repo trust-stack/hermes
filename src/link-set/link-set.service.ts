@@ -63,7 +63,6 @@ export class LinkSetService {
               data: dto.links.map((link) => ({
                 relationType: link.relationType,
                 href: link.href,
-                objectId: link.objectKey,
                 title: link.title,
                 lang: link.lang,
               })),

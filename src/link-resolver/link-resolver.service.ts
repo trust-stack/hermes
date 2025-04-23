@@ -1,7 +1,7 @@
 import {Inject, Injectable} from "@nestjs/common";
 import {ExternalResolver, Link, Prisma, PrismaClient} from "@prisma/client";
 import {mapValues} from "lodash";
-import {appConfig, AppConfig} from "src/config";
+import {appConfig, AppConfig} from "../config";
 import {LinkSet, linkSetToUrl} from "../link-set/utils";
 import {LinkDto, ResolvedLinkSetDto} from "./dtos";
 import {parseUrlPath} from "./utils";

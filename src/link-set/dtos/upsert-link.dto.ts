@@ -18,13 +18,6 @@ export class UpsertLinkDto {
   href?: string;
 
   @ApiProperty({
-    required: false,
-    description: "The object key of the link, if TYPE is OBJECT.",
-  })
-  @IsString()
-  objectKey?: string;
-
-  @ApiProperty({
     required: true,
     description: "The title of the link.",
   })

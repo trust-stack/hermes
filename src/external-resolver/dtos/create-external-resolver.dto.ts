@@ -1,6 +1,6 @@
 import {ApiProperty} from "@nestjs/swagger";
 import {Type} from "class-transformer";
-import {IsArray, IsString, Length, ValidateNested} from "class-validator";
+import {IsArray, IsOptional, IsString, ValidateNested} from "class-validator";
 
 export class CreateExternalResolverDto {
   @ApiProperty({
@@ -29,8 +29,8 @@ export class CreateExternalResolverDto {
     description: "The creation data of the External Resolver.",
   })
   @IsArray()
-  @Length(1)
   @ValidateNested({each: true})
   @Type(() => CreateExternalResolverDto)
+  @IsOptional()
   childExternalResolvers?: CreateExternalResolverDto[];
 }

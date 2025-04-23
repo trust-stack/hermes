@@ -3,7 +3,7 @@ import {Request, Response} from "express";
 import {LinkResolverService} from "./link-resolver.service";
 
 @Controller()
-export class ResolverController {
+export class LinkResolverController {
   constructor(private readonly resolverService: LinkResolverService) {}
 
   @Get("*")
