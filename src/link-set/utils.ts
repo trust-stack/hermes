@@ -1,4 +1,4 @@
-import { parseUrlPath } from "../resolver/utils";
+import {parseUrlPath} from "../link-resolver/utils";
 
 export type LinkSet = {
   readonly qualifier: string;
@@ -11,7 +11,7 @@ export function urlToLinkSet(url: string): LinkSet {
 
   if (segments.length === 0) {
     throw new Error(
-      "Invalid URL: must contain at least one qualifier/identifier pair",
+      "Invalid URL: must contain at least one qualifier/identifier pair"
     );
   }
 

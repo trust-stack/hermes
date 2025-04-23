@@ -1,14 +1,14 @@
-import { Inject, Injectable, Scope } from "@nestjs/common";
-import { Prisma, PrismaClient } from "@prisma/client";
-import { v4 as uuid } from "uuid";
-import { PaginationDto } from "../shared/dto";
+import {Inject, Injectable, Scope} from "@nestjs/common";
+import {Prisma, PrismaClient} from "@prisma/client";
+import {v4 as uuid} from "uuid";
+import {PaginationDto} from "../shared/dto";
 import {
   CreateExternalResolverDto,
   ExternalResolverDto,
   UpdateExternalResolverDto,
-} from "./external-resolver.dto";
+} from "./dtos";
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable({scope: Scope.REQUEST})
 export class ExternalResolverService {
   constructor(@Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient) {}
 
@@ -41,7 +41,7 @@ export class ExternalResolverService {
   async update(id: string, dto: UpdateExternalResolverDto) {
     // Delete resolver, cascade delete children
     await this.prisma.externalResolver.delete({
-      where: { id: id },
+      where: {id: id},
     });
 
     // Recreate
@@ -93,7 +93,7 @@ export class ExternalResolverService {
   }
 
   async delete(id: string): Promise<string> {
-    await this.prisma.externalResolver.delete({ where: { id } });
+    await this.prisma.externalResolver.delete({where: {id}});
     return id;
   }
 }

@@ -242,7 +242,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateLinkSetDto"
+                "$ref": "#/components/schemas/CreateLinkSet"
               }
             }
           }
@@ -306,7 +306,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateLinkSetDto"
+                "$ref": "#/components/schemas/UpdateLinkSet"
               }
             }
           }
@@ -382,7 +382,7 @@
     },
     "/*": {
       "get": {
-        "operationId": "ResolverController_resolve",
+        "operationId": "LinkResolverController_resolve",
         "parameters": [],
         "responses": {
           "200": {
@@ -390,13 +390,13 @@
           }
         },
         "tags": [
-          "Resolver"
+          "LinkResolver"
         ]
       }
     },
     "/.well-known/resolver": {
       "get": {
-        "operationId": "ResolverController_getResolverMetadata",
+        "operationId": "LinkResolverController_getResolverMetadata",
         "parameters": [],
         "responses": {
           "200": {
@@ -404,7 +404,7 @@
           }
         },
         "tags": [
-          "Resolver"
+          "LinkResolver"
         ]
       }
     }
@@ -503,7 +503,7 @@
           "linkSetId"
         ]
       },
-      "UpsertLinkDto": {
+      "UpsertLink": {
         "type": "object",
         "properties": {
           "relationType": {
@@ -513,10 +513,6 @@
           "href": {
             "type": "string",
             "description": "The href of the link."
-          },
-          "objectKey": {
-            "type": "string",
-            "description": "The object key of the link, if TYPE is OBJECT."
           },
           "title": {
             "type": "string",
@@ -536,7 +532,7 @@
           "title"
         ]
       },
-      "CreateLinkSetDto": {
+      "CreateLinkSet": {
         "type": "object",
         "properties": {
           "identifier": {
@@ -551,7 +547,7 @@
             "description": "The links of the Link Set.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UpsertLinkDto"
+              "$ref": "#/components/schemas/UpsertLink"
             }
           }
         },
@@ -645,7 +641,7 @@
           "updatedAt"
         ]
       },
-      "UpdateLinkSetDto": {
+      "UpdateLinkSet": {
         "type": "object",
         "properties": {
           "identifier": {
@@ -660,7 +656,7 @@
             "description": "The links of the Link Set.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UpsertLinkDto"
+              "$ref": "#/components/schemas/UpsertLink"
             }
           }
         },

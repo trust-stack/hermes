@@ -8,19 +8,16 @@ import {
   Put,
   Query,
 } from "@nestjs/common";
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
-import { PaginationDto } from "../shared/dto";
-import {
-  CreateExternalResolverDto,
-  UpdateExternalResolverDto,
-} from "./external-resolver.dto";
-import { ExternalResolverService } from "./external-resolver.service";
+import {ApiOperation, ApiTags} from "@nestjs/swagger";
+import {PaginationDto} from "../shared/dto";
+import {CreateExternalResolverDto, UpdateExternalResolverDto} from "./dtos";
+import {ExternalResolverService} from "./external-resolver.service";
 
 @Controller("/external-resolvers")
 @ApiTags("External Resolver")
 export class ExternalResolverController {
   constructor(
-    private readonly externalResolverService: ExternalResolverService,
+    private readonly externalResolverService: ExternalResolverService
   ) {}
 
   @ApiOperation({
@@ -39,7 +36,7 @@ export class ExternalResolverController {
   @Put(":id")
   async update(
     @Param("id") id: string,
-    @Body() dto: UpdateExternalResolverDto,
+    @Body() dto: UpdateExternalResolverDto
   ) {
     return this.externalResolverService.update(id, dto);
   }
