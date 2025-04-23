@@ -382,7 +382,7 @@
     },
     "/*": {
       "get": {
-        "operationId": "ResolverController_resolve",
+        "operationId": "LinkResolverController_resolve",
         "parameters": [],
         "responses": {
           "200": {
@@ -390,13 +390,13 @@
           }
         },
         "tags": [
-          "Resolver"
+          "LinkResolver"
         ]
       }
     },
     "/.well-known/resolver": {
       "get": {
-        "operationId": "ResolverController_getResolverMetadata",
+        "operationId": "LinkResolverController_getResolverMetadata",
         "parameters": [],
         "responses": {
           "200": {
@@ -404,7 +404,7 @@
           }
         },
         "tags": [
-          "Resolver"
+          "LinkResolver"
         ]
       }
     }
@@ -513,10 +513,6 @@
           "href": {
             "type": "string",
             "description": "The href of the link."
-          },
-          "objectKey": {
-            "type": "string",
-            "description": "The object key of the link, if TYPE is OBJECT."
           },
           "title": {
             "type": "string",
