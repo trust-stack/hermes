@@ -101,7 +101,7 @@ describe("ResolverController (e2e)", () => {
             expect(body).toEqual({
               linkset: [
                 {
-                  anchor: "/qualifier/identifier",
+                  anchor: "https://truststack.link/qualifier/identifier",
                   linkset: expect.arrayContaining([
                     {
                       href: "https://example.com",

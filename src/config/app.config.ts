@@ -1,16 +1,17 @@
-import { registerAs } from "@nestjs/config";
+import {registerAs} from "@nestjs/config";
 
 export interface AppConfig {
-  databaseUrl: string;
-  resolverRoot?: string;
-  resolverName?: string;
+  DATABASE_URL: string;
+  RESOLVER_ROOT?: string;
+  RESOLVER_NAME?: string;
 }
 
 export const appConfig = registerAs(
   "app",
   (): AppConfig => ({
-    databaseUrl: process.env.DATABASE_URL,
-    resolverRoot: process.env.RESOLVER_ROOT || "",
-    resolverName: process.env.RESOLVER_NAME || "Trust Stack Link Resolver",
-  }),
+    DATABASE_URL: process.env.DATABASE_URL,
+    RESOLVER_ROOT: process.env.TRUST_STACK_RESOLVER_ROOT || "",
+    RESOLVER_NAME:
+      process.env.TRUST_STACK_RESOLVER_NAME || "Trust Stack Link Resolver",
+  })
 );
