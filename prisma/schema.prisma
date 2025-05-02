@@ -7,51 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model LinkSet {
-  id              String       @id @default(uuid())
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
-  qualifier       String
-  identifier      String
-  links           Link[]
-  childLinkSets   LinkSet[]    @relation(name: "ChildParent")
-  parentLinkSet   LinkSet?     @relation(name: "ChildParent", fields: [parentLinkSetId], references: [id], onDelete: Cascade)
-  parentLinkSetId String?
-  linkAnchors     LinkAnchor[]
-
-  @@unique([qualifier, identifier])
-}
-
 model Link {
   id           String   @id @default(uuid())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+  path         String
   relationType String
   href         String?
   title        String
-  lang         String[]
-  linkSet      LinkSet  @relation(fields: [linkSetId], references: [id], onDelete: Cascade)
-  linkSetId    String
-}
-
-model ExternalResolver {
-  id                       String             @id @default(uuid())
-  createdAt                DateTime           @default(now())
-  updatedAt                DateTime           @updatedAt
-  qualifier                String
-  pattern                  String
-  href                     String
-  childExternalResolvers   ExternalResolver[] @relation(name: "ChildParent")
-  parentExternalResolver   ExternalResolver?  @relation(name: "ChildParent", fields: [parentExternalResolverId], references: [id], onDelete: Cascade)
-  parentExternalResolverId String?
-
-  @@unique([qualifier, pattern])
-}
-
-model LinkAnchor {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  linkSet   LinkSet? @relation(fields: [linkSetId], references: [id])
-  linkSetId String?
+  type         String?
+  hreflang     String[]
+  default      Boolean  @default(false)
 }

@@ -1,335 +1,81 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/external-resolvers": {
+    "/links": {
       "post": {
-        "operationId": "createExternalResolver",
+        "operationId": "createLink",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateExternalResolverDto"
+                "$ref": "#/components/schemas/CreateLink"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": ""
-          }
-        },
-        "summary": "Create External Resolver",
-        "tags": [
-          "External Resolver"
-        ]
-      },
-      "get": {
-        "operationId": "getManyExternalResolvers",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "summary": "",
-        "tags": [
-          "External Resolver"
-        ]
-      }
-    },
-    "/external-resolvers/{id}": {
-      "put": {
-        "operationId": "updateExternalResolver",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateExternalResolverDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "summary": "Update External Resolver",
-        "tags": [
-          "External Resolver"
-        ]
-      },
-      "get": {
-        "operationId": "getExternalResolver",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "summary": "Get External Resolver",
-        "tags": [
-          "External Resolver"
-        ]
-      },
-      "delete": {
-        "operationId": "deleteExternalResolver",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "summary": "Delete External Resolver",
-        "tags": [
-          "External Resolver"
-        ]
-      }
-    },
-    "/link-anchors/mint": {
-      "post": {
-        "description": "Mint a new link anchor",
-        "operationId": "mintLinkAnchor",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "summary": "Mint a new link anchor",
-        "tags": [
-          "LinkAnchor"
-        ]
-      }
-    },
-    "/link-anchors/mint-many": {
-      "post": {
-        "description": "Mint many link anchors",
-        "operationId": "mintManyLinkAnchors",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MintManyRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "summary": "Mint many link anchors",
-        "tags": [
-          "LinkAnchor"
-        ]
-      }
-    },
-    "/link-anchors/{id}/set": {
-      "post": {
-        "description": "Set the link set for a link anchor",
-        "operationId": "setLinkAnchorLinkSet",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SetLinkAnchor"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "summary": "Set the link set for a link anchor",
-        "tags": [
-          "LinkAnchor"
-        ]
-      }
-    },
-    "/link-anchors/{id}": {
-      "get": {
-        "operationId": "LinkAnchorController_get",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "LinkAnchor"
-        ]
-      }
-    },
-    "/link-anchors": {
-      "get": {
-        "description": "Get many link anchors",
-        "operationId": "getManyLinkAnchors",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "summary": "Get many link anchors",
-        "tags": [
-          "LinkAnchor"
-        ]
-      }
-    },
-    "/link-sets": {
-      "post": {
-        "operationId": "createLinkSet",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateLinkSet"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "The Link Set was created.",
+            "description": "The Link was created successfully.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LinkSet"
+                  "$ref": "#/components/schemas/LinkConfiguration"
                 }
               }
             }
           }
         },
-        "summary": "Create Link Set",
+        "summary": "Create Link",
         "tags": [
-          "Link Set"
+          "Link"
         ]
       },
       "get": {
-        "operationId": "getLinkSets",
-        "parameters": [],
+        "operationId": "getLinks",
+        "parameters": [
+          {
+            "name": "offset",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "The Link Sets were found and returned.",
+            "description": "The Links were found and returned.",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/LinkSet"
+                    "$ref": "#/components/schemas/LinkConfiguration"
                   }
                 }
               }
             }
           }
         },
-        "summary": "Get Link Sets",
+        "summary": "Get Links",
         "tags": [
-          "Link Set"
+          "Link"
         ]
       }
     },
-    "/link-sets/{id}": {
-      "put": {
-        "operationId": "updateLinkSet",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateLinkSet"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "The Link Set was updated.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LinkSet"
-                }
-              }
-            }
-          }
-        },
-        "summary": "Update Link Set",
-        "tags": [
-          "Link Set"
-        ]
-      },
+    "/links/{id}": {
       "get": {
-        "operationId": "getLinkSet",
+        "operationId": "getLink",
         "parameters": [
           {
             "name": "id",
@@ -342,23 +88,23 @@
         ],
         "responses": {
           "200": {
-            "description": "The Link Set was found and returned.",
+            "description": "The Link was found and returned.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LinkSet"
+                  "$ref": "#/components/schemas/LinkConfiguration"
                 }
               }
             }
           }
         },
-        "summary": "Get Link Set",
+        "summary": "Get Link by ID",
         "tags": [
-          "Link Set"
+          "Link"
         ]
       },
       "delete": {
-        "operationId": "deleteLinkSet",
+        "operationId": "deleteLink",
         "parameters": [
           {
             "name": "id",
@@ -371,40 +117,43 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "The Link was deleted successfully."
           }
         },
-        "summary": "Delete Link Set",
+        "summary": "Delete Link",
         "tags": [
-          "Link Set"
+          "Link"
         ]
       }
     },
-    "/*": {
+    "/{path}": {
       "get": {
-        "operationId": "LinkResolverController_resolve",
-        "parameters": [],
+        "operationId": "ResolverController_resolve",
+        "parameters": [
+          {
+            "name": "path",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "linkType",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": ""
           }
         },
         "tags": [
-          "LinkResolver"
-        ]
-      }
-    },
-    "/.well-known/resolver": {
-      "get": {
-        "operationId": "LinkResolverController_getResolverMetadata",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "tags": [
-          "LinkResolver"
+          "Resolver"
         ]
       }
     }
@@ -419,251 +168,95 @@
   "servers": [],
   "components": {
     "schemas": {
-      "CreateExternalResolverDto": {
+      "CreateLink": {
         "type": "object",
         "properties": {
-          "href": {
+          "path": {
             "type": "string",
-            "description": "The href of the External Resolver."
+            "description": "The path of the Link."
           },
-          "pattern": {
-            "type": "string",
-            "description": "The pattern of the External Resolver."
-          },
-          "qualifier": {
-            "type": "string",
-            "description": "The qualifier of the External Resolver."
-          },
-          "childExternalResolvers": {
-            "description": "The creation data of the External Resolver.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "href",
-          "pattern",
-          "qualifier",
-          "childExternalResolvers"
-        ]
-      },
-      "UpdateExternalResolverDto": {
-        "type": "object",
-        "properties": {
-          "href": {
-            "type": "string",
-            "description": "The href of the External Resolver."
-          },
-          "pattern": {
-            "type": "string",
-            "description": "The pattern of the External Resolver."
-          },
-          "qualifier": {
-            "type": "string",
-            "description": "The qualifier of the External Resolver."
-          },
-          "childExternalResolvers": {
-            "description": "The creation data of the External Resolver.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "href",
-          "pattern",
-          "qualifier",
-          "childExternalResolvers"
-        ]
-      },
-      "MintManyRequest": {
-        "type": "object",
-        "properties": {
-          "quantity": {
-            "type": "number",
-            "description": "The number of link anchors to mint"
-          }
-        },
-        "required": [
-          "quantity"
-        ]
-      },
-      "SetLinkAnchor": {
-        "type": "object",
-        "properties": {
-          "linkSetId": {
-            "type": "string",
-            "description": "The ID of the link set the link anchor belongs to"
-          }
-        },
-        "required": [
-          "linkSetId"
-        ]
-      },
-      "UpsertLink": {
-        "type": "object",
-        "properties": {
           "relationType": {
             "type": "string",
-            "description": "The relation type of the link."
-          },
-          "href": {
-            "type": "string",
-            "description": "The href of the link."
+            "description": "The type of the Link."
           },
           "title": {
             "type": "string",
-            "description": "The title of the link."
-          },
-          "lang": {
-            "description": "The language of the link.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": [
-          "relationType",
-          "href",
-          "title"
-        ]
-      },
-      "CreateLinkSet": {
-        "type": "object",
-        "properties": {
-          "identifier": {
-            "type": "string",
-            "description": "The identifier of the Link Set."
-          },
-          "qualifier": {
-            "type": "string",
-            "description": "The qualifier of the Link Set."
-          },
-          "links": {
-            "description": "The links of the Link Set.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/UpsertLink"
-            }
-          }
-        },
-        "required": [
-          "identifier",
-          "qualifier",
-          "links"
-        ]
-      },
-      "Link": {
-        "type": "object",
-        "properties": {
-          "relationType": {
-            "type": "string",
-            "description": "The relation type of the link."
+            "description": "The title of the Link."
           },
           "href": {
             "type": "string",
-            "description": "The href of the link."
+            "description": "The href of the Link."
           },
-          "objectKey": {
+          "type": {
             "type": "string",
-            "description": "The object key of the link, if TYPE is OBJECT."
+            "description": "The type of the Link."
           },
-          "title": {
-            "type": "string",
-            "description": "The title of the link"
-          },
-          "lang": {
-            "description": "The language of the link.",
+          "hreflang": {
+            "description": "The href language of the Link.",
             "type": "array",
             "items": {
               "type": "string"
             }
           },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "The creation date of the Link."
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "description": "The last update date of the Link."
+          "default": {
+            "type": "boolean",
+            "description": "Whether the Link is the default Link."
           }
         },
         "required": [
+          "path",
           "relationType",
-          "title",
-          "createdAt",
-          "updatedAt"
+          "href"
         ]
       },
-      "LinkSet": {
+      "LinkConfiguration": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string",
-            "description": "The ID of the Link Set."
-          },
-          "identifier": {
-            "type": "string",
-            "description": "The identifier of the Link Set."
-          },
-          "qualifier": {
-            "type": "string",
-            "description": "The qualifier of the Link Set."
-          },
-          "links": {
-            "description": "The links of the Link Set.",
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Link"
-            }
+            "description": "The id of the Link."
           },
           "createdAt": {
             "format": "date-time",
             "type": "string",
-            "description": "The creation date of the Link Set."
+            "description": "The created at date of the Link."
           },
           "updatedAt": {
             "format": "date-time",
             "type": "string",
-            "description": "The last update date of the Link Set."
-          }
-        },
-        "required": [
-          "qualifier",
-          "links",
-          "createdAt",
-          "updatedAt"
-        ]
-      },
-      "UpdateLinkSet": {
-        "type": "object",
-        "properties": {
-          "identifier": {
-            "type": "string",
-            "description": "The identifier of the Link Set."
+            "description": "The updated at date of the Link."
           },
-          "qualifier": {
+          "path": {
             "type": "string",
-            "description": "The qualifier of the Link Set."
+            "description": "The path of the Link."
           },
-          "links": {
-            "description": "The links of the Link Set.",
+          "type": {
+            "type": "string",
+            "description": "The type of the Link."
+          },
+          "title": {
+            "type": "string",
+            "description": "The title of the Link."
+          },
+          "href": {
+            "type": "string",
+            "description": "The href of the Link."
+          },
+          "hrefLang": {
+            "description": "The href of the Link.",
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/UpsertLink"
+              "type": "string"
             }
           }
         },
         "required": [
-          "identifier",
-          "qualifier",
-          "links"
+          "id",
+          "createdAt",
+          "updatedAt",
+          "path",
+          "type",
+          "href"
         ]
       }
     }
