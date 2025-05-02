@@ -1,5 +1,5 @@
-import { Module } from "@nestjs/common";
-import { createPrismaClient } from "./prisma.factory";
+import {Module} from "@nestjs/common";
+import {createPrismaClient} from "./prisma.factory";
 
 @Module({
   providers: [

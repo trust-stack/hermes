@@ -1,12 +1,23 @@
-import { NestFactory } from "@nestjs/core";
-import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import {ValidationPipe} from "@nestjs/common";
+import {NestFactory} from "@nestjs/core";
+import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import * as dotenv from "dotenv";
-import { AppModule } from "./app.module";
+import {AppModule} from "./app.module";
 
 dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Set up ValidationPipe with useful defaults
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      errorHttpStatusCode: 400,
+    })
+  );
 
   const config = new DocumentBuilder()
     .setTitle("link-resolver Link Resolver")

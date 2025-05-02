@@ -1,9 +1,9 @@
-import { exec } from "child_process";
+import {exec} from "child_process";
 import * as dotenv from "dotenv";
-import { Client } from "pg";
-import { promisify } from "util";
+import {Client} from "pg";
+import {promisify} from "util";
 
-dotenv.config({ path: ".env.test" });
+dotenv.config({path: ".env.test"});
 
 const execAsync = promisify(exec);
 
