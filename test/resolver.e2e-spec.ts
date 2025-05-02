@@ -102,7 +102,7 @@ describe("ResolverController (e2e)", () => {
               linkset: [
                 {
                   anchor: "/qualifier/identifier",
-                  linkSet: expect.arrayContaining([
+                  linkset: expect.arrayContaining([
                     {
                       href: "https://example.com",
                       title: "Test Link",
