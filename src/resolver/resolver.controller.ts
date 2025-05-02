@@ -56,7 +56,7 @@ export class ResolverController {
         linkset: [
           {
             anchor: `${path}`,
-            linkSet: links.map((link) => ({
+            linkset: links.map((link) => ({
               href: link.href,
               title: link.title,
               hreflang: link.hreflang,
