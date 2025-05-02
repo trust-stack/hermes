@@ -11,10 +11,14 @@ import {
 import {PrismaClient} from "@prisma/client";
 import {Response} from "express";
 import {validatePath} from "../link/utils";
+import {AnchorService} from "./anchor.service";
 
 @Controller()
 export class ResolverController {
-  constructor(@Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient) {}
+  constructor(
+    @Inject("PRISMA_CLIENT") private readonly prisma: PrismaClient,
+    private readonly anchorService: AnchorService
+  ) {}
 
   @Get(":path(*)")
   async resolve(
@@ -55,7 +59,7 @@ export class ResolverController {
       return res.json({
         linkset: [
           {
-            anchor: `${path}`,
+            anchor: this.anchorService.getAnchor(path),
             linkset: links.map((link) => ({
               href: link.href,
               title: link.title,

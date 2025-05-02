@@ -1,6 +1,6 @@
 import path from "path";
 import swc from "unplugin-swc";
-import { defineConfig } from "vitest/config";
+import {defineConfig} from "vitest/config";
 
 export default defineConfig({
   test: {
@@ -16,6 +16,8 @@ export default defineConfig({
     env: {
       DATABASE_URL:
         "postgresql://hermes:password@localhost:5432/hermes?schema=public",
+      TRUST_STACK_RESOLVER_ROOT: "https://truststack.link",
+      TRUST_STACK_RESOLVER_NAME: "Trust Stack Link Resolver",
     },
     globalSetup: "./test/test-setup.ts",
     reporters: [
